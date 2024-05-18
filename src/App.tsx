@@ -53,7 +53,7 @@ function App() {
               textShadow: "2px 2px 2px rgb(3, 41, 107)",
             }}
           >
-            Lucky pepe scrachers
+            Lucky pepe scratcher
           </p>
           <img src={PngLuckyPepe} className=" rounded-md" />
           <p
@@ -99,7 +99,7 @@ function App() {
               textShadow: "2px 2px 2px rgb(3, 41, 107)",
             }}
           >
-            Bucks Doge scrachers
+            Bucks Doge scratcher
           </p>
           <img src={PngLuckyDoge} className=" rounded-md" />
           <p
