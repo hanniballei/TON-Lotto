@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
 import { CircleX } from "lucide-react";
 import { useCountUp } from "react-countup";
-import LobbyBox from "@/assets/lobby-box.png";
+import LobbyBox from "@/assets/lobby/lobby-box.png";
 
 const Lobby = () => {
   const [prizeValue, setPrizeValue] = useState<string[]>([]);
