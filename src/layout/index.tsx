@@ -16,9 +16,9 @@ const Header = () => {
 
 const Layout = () => {
   return (
-    <div className="min-h-dvh flex flex-col">
+    <div className="container min-h-dvh max-w-md flex flex-col">
       <Header />
-      <main className="grow">
+      <main className="relative grow">
         <Suspense fallback={<>loading</>}>
           <Outlet />
         </Suspense>
