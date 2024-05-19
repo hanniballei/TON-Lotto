@@ -17,14 +17,12 @@ const Footer = () => (
       </div>
     </button>
 
-    <Link to="/lobby">
-      <button>
-        <img src={PngLobby} className="h-[58px]" />
-        <div className="w-20 mx-auto mt-1 rounded-xl bg-[#0a39b0] bg-opacity-30 text-slate-50">
-          Lobby
-        </div>
-      </button>
-    </Link>
+    <button>
+      <img src={PngLobby} className="h-[58px]" />
+      <div className="w-20 mx-auto mt-1 rounded-xl bg-[#0a39b0] bg-opacity-30 text-slate-50">
+        Lobby
+      </div>
+    </button>
 
     <button>
       <img src={PngGift} className="h-[46px] mx-auto" />

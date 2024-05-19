@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 
@@ -17,13 +16,8 @@ const Header = () => {
 
 const Layout = () => {
   return (
-    <div className="bg-gray-900">
-      <div
-        className={cn(
-          "container min-h-dvh max-w-lg flex flex-col",
-          "bg-gradient-to-r from-blue-900 to-gray-900"
-        )}
-      >
+    <div className="bg-gradient-to-r from-blue-900 to-gray-900">
+      <div className={"container min-h-dvh max-w-lg flex flex-col"}>
         <Header />
         <main className="relative grow">
           <Suspense fallback={<>loading</>}>

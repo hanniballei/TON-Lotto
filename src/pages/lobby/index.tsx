@@ -4,27 +4,73 @@ import { CircleX } from "lucide-react";
 import { useCountUp } from "react-countup";
 import LobbyBox from "@/assets/lobby/lobby-box.png";
 import { useScratcher } from "@/lib/hooks/useScratcher";
+import { Scratcher } from "@/components/Scratcher";
+
+import BgLuckyPepe from "@/assets/lobby/bg-lucky-pepe.png";
+import BgTL from "@/assets/lobby/bg-tl.png";
+import BgTR from "@/assets/lobby/bg-tr.png";
+
+import LuckyPepe from "@/assets/lobby/lucky-pepe.png";
+import LuckyDog from "@/assets/lobby/lucky-dog.png";
+import LuckyDoge from "@/assets/lobby/lucky-doge.png";
+import LuckyPanda from "@/assets/lobby/lucky-panda.png";
+
+interface ScratcherPrize {
+  type: "pepe" | "doge" | "dog" | "panda";
+  img: string;
+  reward: number;
+  ratio: number;
+}
+
+const ScratcherPrizes: ScratcherPrize[] = [
+  { type: "pepe", img: LuckyPepe, reward: 5000000, ratio: 10 },
+  { type: "doge", img: LuckyDoge, reward: 1000000, ratio: 10 },
+  { type: "dog", img: LuckyDog, reward: 300000, ratio: 30 },
+  { type: "panda", img: LuckyPanda, reward: 20000, ratio: 50 },
+];
+
+// 根据中奖概率获取奖励之一
+const getRandomPrize = (prizes: ScratcherPrize[]): ScratcherPrize => {
+  if (prizes.length === 0) {
+    throw new Error("Prizes array cannot be empty");
+  }
+
+  return prizes.reduce<{ prize: ScratcherPrize; value: number }>(
+    (maxPrize, currentPrize) => {
+      const currentValue = Math.random() * 10 * currentPrize.ratio;
+      return currentValue > maxPrize.value
+        ? { prize: currentPrize, value: currentValue }
+        : maxPrize;
+    },
+    { prize: prizes[0], value: Math.random() * 10 * prizes[0].ratio }
+  ).prize;
+};
 
 const Lobby = () => {
-  const [prizeValue, setPrizeValue] = useState<string[]>([]);
+  const [prizeValue, setPrizeValue] = useState<ScratcherPrize[]>([]);
 
   const congratsDialog = useRef<HTMLDialogElement>(null);
+  const scratcherRef = useRef<HTMLCanvasElement>(null);
   const countUpRef = useRef<HTMLSpanElement>(null);
 
   const { initializeCanvas, revealCanvas, scratchedPercent } = useScratcher({
-    canvas: "#scratch",
+    canvas: scratcherRef,
     initializeCallback(element, context) {
+      ScratcherPrizes.map((it) => Math.random() * 10 * it.ratio);
+
       setPrizeValue(
-        new Array(12).fill(0).map(() => (Math.random() * 10 > 5 ? "🐶" : "🐸"))
+        new Array(12).fill(0).map(() => {
+          return getRandomPrize(ScratcherPrizes);
+        })
       );
 
       const image = new Image();
       image.src = LobbyBox;
       image.onload = function () {
-        const cols = 4; // 列数
-        const rows = 3; // 行数
-        const imageWidth = 60; // 固定图片宽度
-        const imageHeight = 60; // 固定图片高度
+        const cols = 4;
+        const rows = 3;
+        const imageWidth = 60;
+        const imageHeight = 60;
 
         const cellWidth = element.width / cols;
         const cellHeight = element.height / rows;
@@ -44,7 +90,9 @@ const Lobby = () => {
   const { start } = useCountUp({
     ref: countUpRef,
     start: 0,
-    end: prizeValue.filter((it) => it === "🐸").length * 1000,
+    end: prizeValue
+      .map((it) => it.reward)
+      .reduce((prev, curr) => prev + curr, 0),
     delay: 0,
     duration: 1,
   });
@@ -52,35 +100,120 @@ const Lobby = () => {
   useEffect(() => {
     if (scratchedPercent === 100) {
       // 中奖提示
-      congratsDialog.current?.showModal();
-      start();
+      setTimeout(() => {
+        congratsDialog.current?.showModal();
+        start();
+      }, 500);
     }
   }, [scratchedPercent, start]);
 
   return (
     <>
       <div className="flex flex-col justify-center items-center gap-6">
-        <div className="relative rounded-md w-full h-[320px] border-4 border-yellow-300 overflow-hidden">
-          <div className="w-full h-full grid grid-cols-4">
-            {prizeValue.map((it) => (
-              <div className="flex justify-center items-center">{it}</div>
-            ))}
+        <div
+          className="relative w-full rounded-md overflow-hidden"
+          style={{
+            background:
+              "linear-gradient(180deg, rgb(9, 8, 83) 0%, rgb(0, 55, 170) 100%)",
+          }}
+        >
+          <img src={BgTL} className="absolute top-0 left-0 h-[108px] -mt-1" />
+          <img src={BgLuckyPepe} className="relative w-[250px] mx-auto z-10 " />
+          <img src={BgTR} className="absolute top-0 right-0 h-[108px] -mt-1" />
+
+          <div className="my-2">
+            <div
+              className="w-full h-[2px]"
+              style={{
+                background: "rgb(249, 73, 26)",
+              }}
+            />
+            <div
+              className="w-full flex justify-center items-center my-[2px] text-center"
+              style={{
+                color: "rgb(248, 231, 159)",
+                background: "rgb(249, 73, 26)",
+              }}
+            >
+              WIN UP TO{" "}
+              <span
+                style={{
+                  fontSize: "36px",
+                  fontWeight: "bold",
+                  textShadow: "inset 1px 2px 2px  rgba(0, 0, 0, 0.25)",
+                }}
+              >
+                $5,000,000
+              </span>
+            </div>
+            <div
+              className="w-full h-[2px]"
+              style={{
+                background: "rgb(249, 73, 26)",
+              }}
+            />
           </div>
-          <canvas
-            id="scratch"
-            className="absolute inset-0 w-full h-full text-center select-none"
-          ></canvas>
+
+          <div className="p-4">
+            <Scratcher
+              className={
+                "rounded-md w-full h-[220px] bg-slate-100 overflow-hidden"
+              }
+              style={{
+                border: "5px solid rgb(212, 48, 48)",
+              }}
+              ref={scratcherRef}
+            >
+              <div className="w-full h-full grid grid-cols-4">
+                {prizeValue.map((it) => (
+                  <div className="relative flex flex-col justify-center items-center text-xs">
+                    <img src={it.img} className="h-8 w-8 rounded-full" />
+                    {`$${it.reward}`}
+                  </div>
+                ))}
+              </div>
+            </Scratcher>
+          </div>
+
+          <p
+            className="text-center mb-4"
+            style={{
+              color: "rgb(248, 231, 159)",
+            }}
+          >
+            Reveal a{" "}
+            <img
+              src={LuckyPepe}
+              className=" inline-block w-8 h-8 rounded-full"
+              style={{ border: "1px solid rgb(248, 231, 159)" }}
+            />{" "}
+            symbol, win prize shown.
+          </p>
         </div>
 
-        <div className="font-bold">Percent {scratchedPercent.toFixed(2)} %</div>
-        <Button onClick={initializeCanvas}>Restart</Button>
-        <Button onClick={revealCanvas}>Reveal</Button>
+        <button
+          className=" rounded-xl text-slate-50 w-full text-lg my-2"
+          style={{
+            background:
+              "linear-gradient(90deg, rgb(84, 7, 5) 0%, rgb(253, 190, 0) 100%)",
+            boxShadow: "1px 1px 2px 1px rgba(255, 141, 26, 1)",
+          }}
+          onClick={() => {
+            scratchedPercent > 0 && scratchedPercent !== 100
+              ? revealCanvas()
+              : initializeCanvas();
+          }}
+        >
+          {scratchedPercent > 0 && scratchedPercent !== 100
+            ? "REVEAL ALL"
+            : "Get a Ticket"}
+        </button>
       </div>
 
       <dialog ref={congratsDialog} className=" bg-transparent">
         <div className="flex flex-col gap-4 justify-center items-center p-6 rounded-md bg-white">
           <p className="text-lg">
-            You got <span ref={countUpRef} /> 🐸 Points
+            You got <span ref={countUpRef} /> Points
           </p>
           <Button autoFocus onClick={() => congratsDialog.current?.close()}>
             <CircleX />

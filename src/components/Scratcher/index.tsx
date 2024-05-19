@@ -1,19 +1,22 @@
+import { cn } from "@/lib/utils";
 import { ForwardedRef, PropsWithChildren, forwardRef } from "react";
+import { type ClassValue } from "clsx";
 
 export const Scratcher = forwardRef(
-  (props: PropsWithChildren, ref: ForwardedRef<HTMLDivElement>) => {
-    const { children } = props;
+  (
+    props: PropsWithChildren<{
+      className?: ClassValue;
+      style?: React.CSSProperties;
+    }>,
+    ref: ForwardedRef<HTMLCanvasElement>
+  ) => {
+    const { children, className, style } = props;
 
     return (
-      <div
-        ref={ref}
-        className="relative rounded-md border-4 border-yellow-300 overflow-hidden"
-      >
+      <div className={cn("relative", className)} style={style}>
         <div className="w-full h-full">{children}</div>
         <canvas
-          id="scratch"
-          width="320"
-          height="320"
+          ref={ref}
           className="absolute inset-0 w-full h-full text-center select-none"
         ></canvas>
       </div>

@@ -1,7 +1,7 @@
 import { MutableRefObject, useCallback, useEffect, useRef, useState } from "react";
 
 interface ScratcherHookProps {
-    canvas: string | MutableRefObject<HTMLCanvasElement>
+    canvas: string | MutableRefObject<HTMLCanvasElement | null>
     initializeCallback?: (element: HTMLCanvasElement, context: CanvasRenderingContext2D) => void
     // 自动开奖阈值(刮出百分比)
     autoRevalPercent?: number
