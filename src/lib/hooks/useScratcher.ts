@@ -84,12 +84,12 @@ export const useScratcher = (props: ScratcherHookProps) => {
 
         const getMouseCoordinates = (event: Event) => {
             const _pageX = deviceType === "mouse"
-                ? (event as MouseEvent).pageX
-                : (event as TouchEvent).touches[0].pageX;
+                ? (event as MouseEvent).pageX - window.pageXOffset
+                : (event as TouchEvent).touches[0].pageX - window.pageXOffset;
 
             const _pageY = deviceType === "mouse"
-                ? (event as MouseEvent).pageY
-                : (event as TouchEvent).touches[0].pageY;
+                ? (event as MouseEvent).pageY - window.pageYOffset
+                : (event as TouchEvent).touches[0].pageY - window.pageYOffset;
 
             mouseX = _pageX - canvasElement.getBoundingClientRect().left;
             mouseY = _pageY - canvasElement.getBoundingClientRect().top;
@@ -145,16 +145,28 @@ export const useScratcher = (props: ScratcherHookProps) => {
         const onMouseUp = () => { isDragging = false; };
         const onMouseLeave = () => { isDragging = false; };
 
-        canvasElement.addEventListener(eventTypes[deviceType].down, onMouseDown);
-        canvasElement.addEventListener(eventTypes[deviceType].move, onMouseMove);
-        canvasElement.addEventListener(eventTypes[deviceType].up, onMouseUp);
-        canvasElement.addEventListener("mouseleave", onMouseLeave);
+        // 滚动后重置事件，处理滚动造成的触摸位置与实际涂层之间的偏移(pageXOffset, pageYOffset)
+        const onScroll = () => {
+            const canvasElement = canvasRef.current;
+            if (!canvasElement) return;
 
-        return () => {
             canvasElement.removeEventListener(eventTypes[deviceType].down, onMouseDown);
             canvasElement.removeEventListener(eventTypes[deviceType].move, onMouseMove);
             canvasElement.removeEventListener(eventTypes[deviceType].up, onMouseUp);
             canvasElement.removeEventListener("mouseleave", onMouseLeave);
+
+            // Re-attach event listeners with updated coordinates
+            canvasElement.addEventListener(eventTypes[deviceType].down, onMouseDown);
+            canvasElement.addEventListener(eventTypes[deviceType].move, onMouseMove);
+            canvasElement.addEventListener(eventTypes[deviceType].up, onMouseUp);
+            canvasElement.addEventListener("mouseleave", onMouseLeave);
+        };
+
+        window.addEventListener('scroll', onScroll);
+
+        return () => {
+            // ... existing cleanup function ...
+            window.removeEventListener('scroll', onScroll);
         };
     }, [initializeCallback, autoRevalPercent, revealCanvas]);
 
