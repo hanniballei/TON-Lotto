@@ -13,9 +13,7 @@ import LuckyDog from "@/assets/lobby/lucky-dog.png";
 import LuckyDoge from "@/assets/lobby/lucky-doge.png";
 import LuckyPanda from "@/assets/lobby/lucky-panda.png";
 
-import PngLightSun from "@/assets/lobby/light-sun.png";
-import PngBigWin from "@/assets/lobby/big-win.png";
-import PngCollectBtn from "@/assets/lobby/collect-btn.png";
+import { CongratsDialog } from "./components";
 
 import "./index.css";
 
@@ -214,42 +212,11 @@ const Lotto = () => {
         </button>
       </div>
 
-      <dialog ref={congratsDialog} className="bg-transparent overflow-hidden">
-        <div className="flex flex-col gap-4 justify-center items-center p-6 rounded-md ">
-          <div className="relative h-[400px] w-full">
-            <img
-              src={PngLightSun}
-              className="absolute w-[800px] inset-0 mx-auto animate-spin"
-              style={{
-                animationDuration: "8000ms",
-              }}
-            />
-
-            <img
-              src={PngBigWin}
-              className="relative z-10 h-[200px] mt-[100px] mx-auto"
-            />
-          </div>
-          <p
-            className=" text-6xl font-bold -mt-[100px]"
-            style={{
-              color: "rgb(252, 188, 0)",
-            }}
-          >
-            <span ref={countUpRef} />
-          </p>
-          <button
-            onClick={() => congratsDialog.current?.close()}
-            className="text-slate-50 text-sm p-6"
-            style={{
-              background: `url(${PngCollectBtn}) no-repeat center`,
-              backgroundSize: "contain",
-            }}
-          >
-            COLLECT
-          </button>
-        </div>
-      </dialog>
+      <CongratsDialog
+        ref={congratsDialog}
+        countUpRef={countUpRef}
+        onCollect={() => congratsDialog.current?.close()}
+      />
     </>
   );
 };
