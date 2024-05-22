@@ -3,7 +3,7 @@ import { lazy } from "react";
 
 import Layout from "@/layout";
 
-import App from "@/App";
+import App from "@/pages/app";
 
 const Lobby = lazy(() => import("@/pages/lobby"));
 
