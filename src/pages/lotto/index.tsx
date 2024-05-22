@@ -50,7 +50,7 @@ const getRandomPrize = (prizes: ScratcherPrize[]): ScratcherPrize => {
   ).prize;
 };
 
-const Lobby = () => {
+const Lotto = () => {
   const [prizeValue, setPrizeValue] = useState<ScratcherPrize[]>([]);
 
   const congratsDialog = useRef<HTMLDialogElement>(null);
@@ -254,4 +254,4 @@ const Lobby = () => {
   );
 };
 
-export default Lobby;
+export default Lotto;

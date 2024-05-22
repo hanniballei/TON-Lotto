@@ -5,7 +5,7 @@ import Layout from "@/layout";
 
 import App from "@/pages/app";
 
-const Lobby = lazy(() => import("@/pages/lobby"));
+const Lobby = lazy(() => import("@/pages/lotto"));
 
 const router = createBrowserRouter([
   {
