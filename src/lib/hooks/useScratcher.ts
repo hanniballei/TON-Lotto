@@ -149,6 +149,7 @@ export const useScratcher = (props: ScratcherHookProps) => {
         const onScroll = () => {
             const canvasElement = canvasRef.current;
             if (!canvasElement) return;
+            console.log('on scroll')
 
             canvasElement.removeEventListener(eventTypes[deviceType].down, onMouseDown);
             canvasElement.removeEventListener(eventTypes[deviceType].move, onMouseMove);
@@ -161,6 +162,8 @@ export const useScratcher = (props: ScratcherHookProps) => {
             canvasElement.addEventListener(eventTypes[deviceType].up, onMouseUp);
             canvasElement.addEventListener("mouseleave", onMouseLeave);
         };
+
+        onScroll()
 
         window.addEventListener('scroll', onScroll);
 
