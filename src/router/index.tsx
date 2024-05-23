@@ -5,7 +5,8 @@ import Layout from "@/layout";
 
 import App from "@/pages/app";
 
-const Lobby = lazy(() => import("@/pages/lotto"));
+const Lotto = lazy(() => import("@/pages/lotto"));
+const Ranking = lazy(() => import("@/pages/ranking"));
 
 const router = createBrowserRouter([
   {
@@ -13,7 +14,8 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: "/", element: <App /> },
-      { path: "/lobby", element: <Lobby /> },
+      { path: "/lobby", element: <Lotto /> },
+      { path: "/ranking", element: <Ranking /> },
     ],
   },
 ]);
