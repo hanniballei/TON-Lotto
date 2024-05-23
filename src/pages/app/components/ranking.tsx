@@ -1,6 +1,7 @@
 import PngChampion from "@/assets/app/champion.png";
 import PngCoin from "@/assets/app/coin.png";
 import PngRanking from "@/assets/app/rank.png";
+import { Link } from "react-router-dom";
 
 export const Ranking = () => {
   return (
@@ -53,17 +54,19 @@ export const Ranking = () => {
       >
         233
       </p>
-      <button
-        className="relative w-24 h-[28px] flex justify-center items-center mx-auto rounded-xl font-bold"
-        style={{
-          background: `rgb(255, 139, 0)`,
-          backgroundSize: "contain",
-          boxShadow: "inset 2px 2px 5px rgb(255, 255, 255)",
-          color: "rgb(56, 56, 56)",
-        }}
-      >
-        <span className="text-xs text-slate-50">Get Ticket</span>
-      </button>
+      <Link to="/ranking">
+        <button
+          className="relative w-24 h-[28px] flex justify-center items-center mx-auto rounded-xl font-bold"
+          style={{
+            background: `rgb(255, 139, 0)`,
+            backgroundSize: "contain",
+            boxShadow: "inset 2px 2px 5px rgb(255, 255, 255)",
+            color: "rgb(56, 56, 56)",
+          }}
+        >
+          <span className="text-xs text-slate-50">Learn More</span>
+        </button>
+      </Link>
     </div>
   );
 };
