@@ -1,15 +1,20 @@
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
+import { TonConnectButton } from "@tonconnect/ui-react";
 
 const Header = () => {
   return (
-    <header className="flex gap-2 py-4 text-slate-50">
-      <div className="border rounded-md p-2">
-        💰<span className="ml-2">6000000</span>
+    <header className="flex justify-between py-4 text-slate-50">
+      <div className="flex gap-2">
+        <div className="border rounded-md p-2">
+          💰<span className="ml-2">6000000</span>
+        </div>
+        <div className="border rounded-md p-2">
+          💎<span className="ml-2">6</span>
+        </div>
       </div>
-      <div className="border rounded-md p-2">
-        💎<span className="ml-2">6</span>
-      </div>
+
+      <TonConnectButton />
     </header>
   );
 };
