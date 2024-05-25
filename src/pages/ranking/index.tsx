@@ -5,6 +5,8 @@ import PngPeoples from "@/assets/ranking/peoples.png";
 import PngLock from "@/assets/ranking/lock.png";
 
 const Ranking = () => {
+  const ranks = [1, 2, 3];
+
   return (
     <div>
       <h1
@@ -59,30 +61,65 @@ const Ranking = () => {
         </div>
       </div>
 
-      <div>
-        Invite Friends
-        <button>+ $1000</button>
+      <div className="flex gap-2 mt-2">
+        <div className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]">
+          Invite Friends
+        </div>
+
+        <button
+          className="text-[#383838] font-bold bg-[#FF8B00] rounded-lg w-[120px]"
+          style={{
+            boxShadow: "inset 2px 2px 5px  #FFFFFF",
+          }}
+        >
+          +$1000
+        </button>
       </div>
 
-      <div>
-        Daily Check-in
-        <button>+ $200</button>
+      <div className="flex gap-2 mt-2">
+        <div className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]">
+          Daily Check-in
+        </div>
+
+        <button
+          className="text-[#383838] font-bold bg-[#FF8B00] rounded-lg w-[120px]"
+          style={{
+            boxShadow: "inset 2px 2px 5px  #FFFFFF",
+          }}
+        >
+          +$200
+        </button>
       </div>
 
       <div
-        className="rounded-lg px-2 py-4"
+        className="rounded-lg px-2 py-4 mt-4"
         style={{
           background: "rgba(255, 255, 255, 0.65)",
         }}
       >
-        <div>
-          <img src={PngNo1} />
-          <div>
-            <p>Anton</p>
-            <p>12345 Frens</p>
-          </div>
-          <div>800000 Points</div>
-        </div>
+        {ranks.map((it, index) => (
+          <>
+            <div key={index} className="flex justify-between items-center">
+              <div className="flex gap-4 items-center">
+                {index === 0 ? (
+                  <img src={PngNo1} className="h-[40px] w-[40px]" />
+                ) : (
+                  <div className="rounded-full border-2 w-[40px] h-[40px] flex justify-center items-center text-[#FFE47C] border-[#FFE47C]">
+                    {index + 1}
+                  </div>
+                )}
+                <div>
+                  <p className="font-bold">Anton</p>
+                  <p className="text-white">12345 Frens</p>
+                </div>
+              </div>
+              <div className="text-[#FFE47C]">800000 Points</div>
+            </div>
+            {index !== ranks.length - 1 && (
+              <div className="h-[2px] bg-[#E5E5E5] my-1" />
+            )}
+          </>
+        ))}
       </div>
     </div>
   );
