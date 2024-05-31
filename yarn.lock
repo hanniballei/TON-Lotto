@@ -627,6 +627,18 @@
   dependencies:
     "@tanstack/query-core" "5.36.1"
 
+"@tma.js/sdk-react@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.npmmirror.com/@tma.js/sdk-react/-/sdk-react-2.2.2.tgz#751b41386665b91c880a80bfa4daf0d44f349f39"
+  integrity sha512-zu0eEbZ6eAOwpJuR0dKrYYMrKNcx4xXMeC/7ZwmuxQldb5xwfH9HG4y/62Hs1br3nbidg6TPrkH5YHLxQRisgQ==
+  dependencies:
+    "@tma.js/sdk" "2.4.0"
+
+"@tma.js/sdk@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.npmmirror.com/@tma.js/sdk/-/sdk-2.4.0.tgz#9ea6fc485988a8aa5ff2dc6074d92eed9b88210c"
+  integrity sha512-cSJClNfoI7S0mC7b7RJQwaUCeR83UahqNG4A8kmCO4SeFFYsOX/XXXMQN0NilcQA4BfqwTMLPUbi/dV7r6b7BQ==
+
 "@tonconnect/isomorphic-eventsource@^0.0.2":
   version "0.0.2"
   resolved "https://registry.npmmirror.com/@tonconnect/isomorphic-eventsource/-/isomorphic-eventsource-0.0.2.tgz#e58c44cf9953e090f2c35da9a638946ddb614be5"
@@ -1459,6 +1471,11 @@ emoji-regex@^9.2.2:
   version "9.2.2"
   resolved "https://registry.npmmirror.com/emoji-regex/-/emoji-regex-9.2.2.tgz#840c8803b0d8047f4ff0cf963176b32d4ef3ed72"
   integrity sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==
+
+eruda@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmmirror.com/eruda/-/eruda-3.0.1.tgz#6c07ae2b3ced54151c6e9b21f9b8da11e6ec988a"
+  integrity sha512-6q1Xdwga4JTr1mKSW4mzuWSSbmXgqpm/8Wa1QGFGfCWRjC0bCQjbS4u06M1te1moucIS3hBLlbSTPWYH2W0qbQ==
 
 es-define-property@^1.0.0:
   version "1.0.0"

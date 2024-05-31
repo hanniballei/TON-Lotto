@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
-import { TonConnectButton } from "@tonconnect/ui-react";
+// import { TonConnectButton } from "@tonconnect/ui-react";
 
 const Header = () => {
   return (
@@ -14,7 +14,7 @@ const Header = () => {
         </div>
       </div>
 
-      <TonConnectButton />
+      {/* <TonConnectButton /> */}
     </header>
   );
 };
