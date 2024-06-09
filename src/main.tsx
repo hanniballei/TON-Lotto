@@ -15,7 +15,7 @@ import { mockInitDataRaw, ThemeParams } from "./const/env";
 
 const queryClient = new QueryClient();
 
-if (import.meta.env.DEV) {
+if (import.meta.env.DEV || import.meta.env.PROD) {
   const initDataRaw = new URLSearchParams(mockInitDataRaw).toString();
 
   mockTelegramEnv({
