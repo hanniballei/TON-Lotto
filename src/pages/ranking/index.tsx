@@ -97,7 +97,7 @@ const Ranking = () => {
           background: "rgba(255, 255, 255, 0.65)",
         }}
       >
-        {ranks.map((it, index) => (
+        {ranks.map((_it, index) => (
           <>
             <div key={index} className="flex justify-between items-center">
               <div className="flex gap-4 items-center">
