@@ -11,11 +11,13 @@ import {
   parseInitData,
   useLaunchParams,
 } from "@tma.js/sdk-react";
+import WebApp from "@twa-dev/sdk";
 import { mockInitDataRaw, ThemeParams } from "./const/env";
+import { storageSet } from "./lib/storage";
 
 const queryClient = new QueryClient();
 
-if (import.meta.env.DEV || import.meta.env.PROD) {
+if (import.meta.env.DEV || WebApp.platform === "unknown") {
   const initDataRaw = new URLSearchParams(mockInitDataRaw).toString();
 
   mockTelegramEnv({
@@ -30,8 +32,15 @@ if (import.meta.env.DEV || import.meta.env.PROD) {
 // eslint-disable-next-line react-refresh/only-export-components
 const Root: FC = () => {
   const launchParams = useLaunchParams();
+  const { initDataRaw } = launchParams || {};
 
   const [closingBehavior] = initClosingBehavior();
+
+  useEffect(() => {
+    if (initDataRaw) {
+      storageSet("initDataRaw", initDataRaw);
+    }
+  }, [initDataRaw]);
 
   const manifestUrl = useMemo(() => {
     return new URL("tonconnect-manifest.json", window.location.href).toString();

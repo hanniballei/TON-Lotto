@@ -1,9 +1,18 @@
 import { BackButtonManipulator } from "@/components/BackButtonManipulator";
-import { Suspense } from "react";
+import { http } from "@/lib/http";
+import { Suspense, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 // import { TonConnectButton } from "@tonconnect/ui-react";
 
 const Header = () => {
+  useEffect(() => {
+    const init = async () => {
+      const { data } = await http.get("/user");
+      console.log("🐞 => init => data:", data);
+    };
+    init();
+  }, []);
+
   return (
     <header className="flex justify-between py-4 text-slate-50">
       <div className="flex gap-2">
