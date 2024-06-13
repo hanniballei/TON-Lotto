@@ -8,7 +8,7 @@ import {
 
 function App() {
   return (
-    <div className=" h-full flex flex-col justify-center items-center gap-6">
+    <div className="h-full flex flex-col justify-center items-center gap-6">
       <div className="grid grid-cols-2 gap-2">
         <LuckyPepe />
 

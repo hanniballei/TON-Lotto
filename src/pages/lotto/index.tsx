@@ -16,6 +16,7 @@ import LuckyPanda from "@/assets/lobby/lucky-panda.png";
 import { CongratsDialog } from "./components";
 
 import "./index.css";
+import { http } from "@/lib/http";
 
 interface ScratcherPrize {
   type: "pepe" | "doge" | "dog" | "panda";
@@ -51,9 +52,19 @@ const getRandomPrize = (prizes: ScratcherPrize[]): ScratcherPrize => {
 const Lotto = () => {
   const [prizeValue, setPrizeValue] = useState<ScratcherPrize[]>([]);
 
+  const [hasUnReval, setHasUnReval] = useState(false);
+
   const congratsDialog = useRef<HTMLDialogElement>(null);
   const scratcherRef = useRef<HTMLCanvasElement>(null);
   const countUpRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const check = async () => {
+      const { data } = await http.get("/lotto/check");
+      setHasUnReval(Boolean(data));
+    };
+    check();
+  }, []);
 
   const { initializeCanvas, revealCanvas, scratchedPercent } = useScratcher({
     canvas: scratcherRef,
@@ -108,6 +119,12 @@ const Lotto = () => {
       }, 500);
     }
   }, [scratchedPercent, start]);
+
+  const getButtonShowText = () => {
+    if (hasUnReval) return "Continue";
+    if (scratchedPercent > 0 && scratchedPercent !== 100) return "REVEAL ALL";
+    return "Get a Ticket";
+  };
 
   return (
     <>
@@ -167,8 +184,11 @@ const Lotto = () => {
               ref={scratcherRef}
             >
               <div className="w-full h-full grid grid-cols-4">
-                {prizeValue.map((it) => (
-                  <div className="relative flex flex-col justify-center items-center text-xs">
+                {prizeValue.map((it, index) => (
+                  <div
+                    key={index}
+                    className="relative flex flex-col justify-center items-center text-xs"
+                  >
                     <img src={it.img} className="h-8 w-8 rounded-full" />
                     {`$${it.reward}`}
                   </div>
@@ -206,9 +226,7 @@ const Lotto = () => {
               : initializeCanvas();
           }}
         >
-          {scratchedPercent > 0 && scratchedPercent !== 100
-            ? "REVEAL ALL"
-            : "Get a Ticket"}
+          {getButtonShowText()}
         </button>
       </div>
 
