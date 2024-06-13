@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, PropsWithChildren } from "react";
 import { useCountUp } from "react-countup";
 import LobbyBox from "@/assets/lobby/lobby-box.png";
 import { useScratcher } from "@/lib/hooks/useScratcher";
@@ -49,10 +49,30 @@ const getRandomPrize = (prizes: ScratcherPrize[]): ScratcherPrize => {
   ).prize;
 };
 
+const MainButton = (
+  props: PropsWithChildren<React.ButtonHTMLAttributes<HTMLButtonElement>>
+) => {
+  const { children, ...restProps } = props;
+  return (
+    <button
+      className=" rounded-xl text-slate-50 w-full text-lg"
+      style={{
+        background:
+          "linear-gradient(90deg, rgb(84, 7, 5) 0%, rgb(253, 190, 0) 100%)",
+        boxShadow: "1px 1px 2px 1px rgba(255, 141, 26, 1)",
+      }}
+      {...restProps}
+    >
+      {children}
+    </button>
+  );
+};
+
 const Lotto = () => {
   const [prizeValue, setPrizeValue] = useState<ScratcherPrize[]>([]);
 
-  const [hasUnReval, setHasUnReval] = useState(false);
+  const [hasUnReveal, setHasUnReveal] = useState(false);
+  const [gaming, setGaming] = useState(false);
 
   const congratsDialog = useRef<HTMLDialogElement>(null);
   const scratcherRef = useRef<HTMLCanvasElement>(null);
@@ -61,7 +81,7 @@ const Lotto = () => {
   useEffect(() => {
     const check = async () => {
       const { data } = await http.get("/lotto/check");
-      setHasUnReval(Boolean(data));
+      setHasUnReveal(Boolean(data));
     };
     check();
   }, []);
@@ -115,20 +135,28 @@ const Lotto = () => {
       // 中奖提示
       setTimeout(() => {
         congratsDialog.current?.showModal();
+        setGaming(false);
         start();
       }, 500);
     }
   }, [scratchedPercent, start]);
 
-  const getButtonShowText = () => {
-    if (hasUnReval) return "Continue";
-    if (scratchedPercent > 0 && scratchedPercent !== 100) return "REVEAL ALL";
-    return "Get a Ticket";
+  const onStart = () => {
+    initializeCanvas();
+    setGaming(true);
+  };
+  const onReveal = () => {
+    revealCanvas();
+    setGaming(false);
+  };
+  const onContinue = () => {
+    setHasUnReveal(false);
+    setGaming(true);
   };
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center gap-6">
+      <div className="flex flex-col justify-center items-center gap-4 mb-4">
         <div
           className="relative w-full rounded-md overflow-hidden"
           style={{
@@ -173,7 +201,13 @@ const Lotto = () => {
             />
           </div>
 
-          <div className="p-4">
+          <div className="relative p-4">
+            {!gaming && (
+              <div className=" absolute inset-0 m-4 rounded-md bg-black opacity-50 z-10 text-white flex justify-center items-center">
+                Get a ticket or Continue
+              </div>
+            )}
+
             <Scratcher
               className={
                 "rounded-md w-full h-[220px] bg-slate-100 overflow-hidden"
@@ -213,21 +247,11 @@ const Lotto = () => {
           </p>
         </div>
 
-        <button
-          className=" rounded-xl text-slate-50 w-full text-lg my-2"
-          style={{
-            background:
-              "linear-gradient(90deg, rgb(84, 7, 5) 0%, rgb(253, 190, 0) 100%)",
-            boxShadow: "1px 1px 2px 1px rgba(255, 141, 26, 1)",
-          }}
-          onClick={() => {
-            scratchedPercent > 0 && scratchedPercent !== 100
-              ? revealCanvas()
-              : initializeCanvas();
-          }}
-        >
-          {getButtonShowText()}
-        </button>
+        {hasUnReveal && <MainButton onClick={onContinue}>Continue</MainButton>}
+        {gaming && scratchedPercent >= 0 && scratchedPercent !== 100 && (
+          <MainButton onClick={onReveal}>REVEAL ALL</MainButton>
+        )}
+        {!gaming && <MainButton onClick={onStart}>Get a Ticket</MainButton>}
       </div>
 
       <CongratsDialog
