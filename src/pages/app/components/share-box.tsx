@@ -1,6 +1,16 @@
 import PngTreasure from "@/assets/app/treasure.png";
+import { GameUrl } from "@/const/app";
+import { useUtils } from "@tma.js/sdk-react";
 
 export const ShareBox = () => {
+  const utils = useUtils();
+
+  const onShare = () => {
+    utils.openTelegramLink(
+      `https://t.me/share?url=${encodeURIComponent(GameUrl)}&text=${"Let's Go"}`
+    );
+  };
+
   return (
     <div className="grow w-full flex">
       <div
@@ -10,7 +20,7 @@ export const ShareBox = () => {
             "linear-gradient(90deg, rgba(56, 56, 56, 0.8) 0%, rgba(8, 53, 135, 1) 99.91%)",
         }}
       >
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col justify-between" onClick={onShare}>
           <p>
             Share with Friends
             <br />
