@@ -9,44 +9,21 @@ import BgTL from "@/assets/lobby/bg-tl.png";
 import BgTR from "@/assets/lobby/bg-tr.png";
 
 import LuckyPepe from "@/assets/lobby/lucky-pepe.png";
-import LuckyDog from "@/assets/lobby/lucky-dog.png";
+import LuckyBonk from "@/assets/lobby/lucky-dog.png";
 import LuckyDoge from "@/assets/lobby/lucky-doge.png";
-import LuckyPanda from "@/assets/lobby/lucky-panda.png";
+import LuckyPogai from "@/assets/lobby/lucky-panda.png";
 
 import { CongratsDialog } from "./components";
 
+import { Lotto as ILotto, LottoTicket, LottoType } from "./types";
+import { api } from "./api";
 import "./index.css";
-import { http } from "@/lib/http";
 
-interface ScratcherPrize {
-  type: "pepe" | "doge" | "dog" | "panda";
-  img: string;
-  reward: number;
-  ratio: number;
-}
-
-const ScratcherPrizes: ScratcherPrize[] = [
-  { type: "pepe", img: LuckyPepe, reward: 5000000, ratio: 10 },
-  { type: "doge", img: LuckyDoge, reward: 1000000, ratio: 10 },
-  { type: "dog", img: LuckyDog, reward: 300000, ratio: 30 },
-  { type: "panda", img: LuckyPanda, reward: 20000, ratio: 50 },
-];
-
-// 根据中奖概率获取奖励之一
-const getRandomPrize = (prizes: ScratcherPrize[]): ScratcherPrize => {
-  if (prizes.length === 0) {
-    throw new Error("Prizes array cannot be empty");
-  }
-
-  return prizes.reduce<{ prize: ScratcherPrize; value: number }>(
-    (maxPrize, currentPrize) => {
-      const currentValue = Math.random() * 10 * currentPrize.ratio;
-      return currentValue > maxPrize.value
-        ? { prize: currentPrize, value: currentValue }
-        : maxPrize;
-    },
-    { prize: prizes[0], value: Math.random() * 10 * prizes[0].ratio }
-  ).prize;
+const IconMap: Record<LottoType, string> = {
+  doge: LuckyDoge,
+  pepe: LuckyPepe,
+  bonk: LuckyBonk,
+  pogai: LuckyPogai,
 };
 
 const MainButton = (
@@ -69,7 +46,7 @@ const MainButton = (
 };
 
 const Lotto = () => {
-  const [prizeValue, setPrizeValue] = useState<ScratcherPrize[]>([]);
+  const [prizeValue, setPrizeValue] = useState<ILotto[]>([]);
 
   const [hasUnReveal, setHasUnReveal] = useState(false);
   const [gaming, setGaming] = useState(false);
@@ -78,25 +55,9 @@ const Lotto = () => {
   const scratcherRef = useRef<HTMLCanvasElement>(null);
   const countUpRef = useRef<HTMLSpanElement>(null);
 
-  useEffect(() => {
-    const check = async () => {
-      const { data } = await http.get("/lotto/check");
-      setHasUnReveal(Boolean(data));
-    };
-    check();
-  }, []);
-
   const { initializeCanvas, revealCanvas, scratchedPercent } = useScratcher({
     canvas: scratcherRef,
     initializeCallback(element, context) {
-      ScratcherPrizes.map((it) => Math.random() * 10 * it.ratio);
-
-      setPrizeValue(
-        new Array(12).fill(0).map(() => {
-          return getRandomPrize(ScratcherPrizes);
-        })
-      );
-
       const image = new Image();
       image.src = LobbyBox;
       image.onload = function () {
@@ -124,6 +85,7 @@ const Lotto = () => {
     ref: countUpRef,
     start: 0,
     end: prizeValue
+      .filter((it) => it.icon === "pepe")
       .map((it) => it.reward)
       .reduce((prev, curr) => prev + curr, 0),
     delay: 0,
@@ -131,25 +93,43 @@ const Lotto = () => {
   });
 
   useEffect(() => {
+    // 检查是否有未消耗彩票
+    const check = async () => {
+      const { data } = await api.checkUnReveal();
+      setHasUnReveal(Boolean(data));
+    };
+    check();
+  }, []);
+
+  useEffect(() => {
     if (scratchedPercent === 100) {
       // 中奖提示
-      setTimeout(() => {
+      setTimeout(async () => {
+        await api.submitTicket();
         congratsDialog.current?.showModal();
         setGaming(false);
         start();
-      }, 500);
+      });
     }
   }, [scratchedPercent, start]);
 
-  const onStart = () => {
+  const onStart = async () => {
+    const { data } = await api.getTicket();
+    setPrizeValue((data as LottoTicket).lottoInfo.lotto);
+
     initializeCanvas();
     setGaming(true);
   };
+
   const onReveal = () => {
     revealCanvas();
     setGaming(false);
   };
-  const onContinue = () => {
+
+  const onContinue = async () => {
+    const { data } = await api.getTicket();
+    setPrizeValue((data as LottoTicket).lottoInfo.lotto);
+
     setHasUnReveal(false);
     setGaming(true);
   };
@@ -223,7 +203,10 @@ const Lotto = () => {
                     key={index}
                     className="relative flex flex-col justify-center items-center text-xs"
                   >
-                    <img src={it.img} className="h-8 w-8 rounded-full" />
+                    <img
+                      src={IconMap[it.icon]}
+                      className="h-8 w-8 rounded-full"
+                    />
                     {`$${it.reward}`}
                   </div>
                 ))}
@@ -251,7 +234,9 @@ const Lotto = () => {
         {gaming && scratchedPercent >= 0 && scratchedPercent !== 100 && (
           <MainButton onClick={onReveal}>REVEAL ALL</MainButton>
         )}
-        {!gaming && <MainButton onClick={onStart}>Get a Ticket</MainButton>}
+        {!hasUnReveal && !gaming && (
+          <MainButton onClick={onStart}>Get a Ticket</MainButton>
+        )}
       </div>
 
       <CongratsDialog

@@ -40,7 +40,7 @@ const Layout = () => {
     <>
       <BackButtonManipulator />
       <div className="bg-gradient-to-r from-[#0a39b0] to-blue-950">
-        <div className={"container min-h-dvh max-w-lg flex flex-col"}>
+        <div className={"container min-h-dvh max-w-lg flex flex-col px-4"}>
           <Header />
           <main className="relative grow">
             <Suspense fallback={<>loading</>}>
