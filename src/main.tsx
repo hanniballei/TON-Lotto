@@ -41,7 +41,7 @@ const Root: FC = () => {
 
   useEffect(() => {
     if (initDataRaw) {
-      storageSet("initDataRaw", initDataRaw);
+      storageSet("init_data_raw", initDataRaw);
     }
   }, [initDataRaw]);
 
