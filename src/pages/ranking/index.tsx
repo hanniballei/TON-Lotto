@@ -92,7 +92,7 @@ const Ranking = () => {
       </div>
 
       <div
-        className="rounded-lg px-2 py-4 mt-4"
+        className="rounded-lg px-2 py-4 my-4"
         style={{
           background: "rgba(255, 255, 255, 0.65)",
         }}

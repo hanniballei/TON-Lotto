@@ -232,7 +232,7 @@ const Lotto = () => {
           </p>
         </div>
 
-        <div className="w-full flex gap-2">
+        <div className=" sticky bottom-0 w-full flex gap-2">
           <Link to="/">
             <button
               className="rounded-xl py-1 px-2 flex flex-col justify-center items-center"

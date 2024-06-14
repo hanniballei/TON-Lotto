@@ -5,6 +5,7 @@ import { getStartParams } from "@/lib/tma";
 import { useLaunchParams } from "@tma.js/sdk-react";
 import { Suspense, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
+import Loading from "@/components/Loading";
 import IconChips from "@/assets/app/icon_chips.png";
 import IconPoints from "@/assets/app/icon_points.png";
 
@@ -59,7 +60,13 @@ const Layout = () => {
         <div className={"container min-h-dvh max-w-lg flex flex-col px-4"}>
           <Header />
           <main className="relative grow">
-            <Suspense fallback={<>loading</>}>
+            <Suspense
+              fallback={
+                <div className="fixed inset-0 w-screen h-screen flex justify-center items-center">
+                  <Loading />
+                </div>
+              }
+            >
               <Outlet />
             </Suspense>
           </main>
