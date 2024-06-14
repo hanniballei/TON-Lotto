@@ -4,7 +4,7 @@ import { storageGet } from "./storage"
 const RequestUrl = {
     dev: 'http://localhost:5008',
     // TODO: change when publish
-    prod: 'http://165.154.200.140:3000'
+    prod: 'https://api-lotto-test.smaug.cc'
 }
 
 export const http = axios.create({
