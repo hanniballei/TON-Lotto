@@ -3,9 +3,67 @@ import PngRank from "@/assets/app/rank.png";
 import PngNo1 from "@/assets/ranking/no-1.png";
 import PngPeoples from "@/assets/ranking/peoples.png";
 import PngLock from "@/assets/ranking/lock.png";
+import { api } from "./api";
+import { useCallback, useEffect, useState } from "react";
+import { RankInfo, TaskStatus } from "./types";
+
+import IconChecked from "@/assets/ranking/btn-checked.svg";
+import { useInvite } from "@/lib/hooks/useInvite";
+import { useUtils } from "@tma.js/sdk-react";
+import { ChannelUrl, TwitterUrl } from "@/const/app";
+
+const ClaimButton = ({
+  points,
+  onClaim,
+}: {
+  points: number;
+  onClaim: () => void;
+}) => (
+  <button
+    className="text-[#383838] font-bold bg-[#FF8B00] rounded-lg w-[120px]"
+    style={{
+      boxShadow: "inset 2px 2px 5px  #FFFFFF",
+    }}
+    onClick={onClaim}
+  >
+    +${points}
+  </button>
+);
+
+const CheckedButton = ({ onClick }: { onClick?: () => void }) => (
+  <button
+    className="flex justify-center items-center bg-[#E5E5E5] rounded-lg w-[120px]"
+    style={{
+      boxShadow: "inset 2px 2px 5px  #FFFFFF",
+    }}
+    onClick={onClick}
+  >
+    <img src={IconChecked} />
+  </button>
+);
 
 const Ranking = () => {
-  const ranks = [1, 2, 3];
+  const tmaUtils = useUtils();
+  const { invite } = useInvite();
+  const [rankInfo, setRankInfo] = useState<RankInfo>();
+  const [taskStatus, setTaskStatus] = useState<TaskStatus>();
+
+  const refreshStatus = useCallback(async () => {
+    const { data } = await api.taskStatus();
+    setTaskStatus(data);
+  }, []);
+
+  useEffect(() => {
+    refreshStatus();
+  }, [refreshStatus]);
+
+  useEffect(() => {
+    const init = async () => {
+      const { data: rankData } = await api.rank();
+      setRankInfo(rankData);
+    };
+    init();
+  }, []);
 
   return (
     <div>
@@ -31,7 +89,7 @@ const Ranking = () => {
           color: "rgb(255, 228, 124)",
         }}
       >
-        1,000,000,000
+        {rankInfo?.current_user.chips}
       </p>
       <div className="w-full flex justify-center items-center gap-2 mx-auto">
         <div
@@ -44,7 +102,9 @@ const Ranking = () => {
             <img className="h-[15px]" src={PngRank} />
             Ranking
           </div>
-          <p className="text-sm font-bold text-center">100</p>
+          <p className="text-sm font-bold text-center">
+            {rankInfo?.current_user.ranking}
+          </p>
         </div>
 
         <div
@@ -57,8 +117,56 @@ const Ranking = () => {
             <img src={PngPeoples} className="h-[15px]" />
             Invitations
           </div>
-          <p className="text-sm font-bold text-center">2000</p>
+          <p className="text-sm font-bold text-center">
+            {rankInfo?.current_user.invite_number}
+          </p>
         </div>
+      </div>
+
+      <div className="flex gap-2 mt-2">
+        <div className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]">
+          Join Channel
+        </div>
+
+        {taskStatus?.join_our_channel ? (
+          <CheckedButton
+            onClick={() => {
+              tmaUtils.openTelegramLink(ChannelUrl);
+            }}
+          />
+        ) : (
+          <ClaimButton
+            points={2000}
+            onClaim={async () => {
+              await api.checkJoinChannel();
+              tmaUtils.openTelegramLink(ChannelUrl);
+              await refreshStatus();
+            }}
+          />
+        )}
+      </div>
+
+      <div className="flex gap-2 mt-2">
+        <div className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]">
+          Follow X
+        </div>
+
+        {taskStatus?.follow_our_x ? (
+          <CheckedButton
+            onClick={() => {
+              tmaUtils.openLink(TwitterUrl);
+            }}
+          />
+        ) : (
+          <ClaimButton
+            points={2000}
+            onClaim={async () => {
+              await api.checkTwitterFollow();
+              tmaUtils.openLink(TwitterUrl);
+              await refreshStatus();
+            }}
+          />
+        )}
       </div>
 
       <div className="flex gap-2 mt-2">
@@ -66,14 +174,22 @@ const Ranking = () => {
           Invite Friends
         </div>
 
-        <button
-          className="text-[#383838] font-bold bg-[#FF8B00] rounded-lg w-[120px]"
-          style={{
-            boxShadow: "inset 2px 2px 5px  #FFFFFF",
-          }}
-        >
-          +$1000
-        </button>
+        {taskStatus?.daily_invite ? (
+          <CheckedButton
+            onClick={() => {
+              invite();
+            }}
+          />
+        ) : (
+          <ClaimButton
+            points={1000}
+            onClaim={async () => {
+              await api.checkDailyInvite();
+              invite();
+              await refreshStatus();
+            }}
+          />
+        )}
       </div>
 
       <div className="flex gap-2 mt-2">
@@ -81,46 +197,69 @@ const Ranking = () => {
           Daily Check-in
         </div>
 
-        <button
-          className="text-[#383838] font-bold bg-[#FF8B00] rounded-lg w-[120px]"
-          style={{
-            boxShadow: "inset 2px 2px 5px  #FFFFFF",
-          }}
-        >
-          +$200
-        </button>
+        {taskStatus?.daily_checkin ? (
+          <CheckedButton />
+        ) : (
+          <ClaimButton
+            points={800}
+            onClaim={async () => {
+              await api.checkDailyClaim();
+              await refreshStatus();
+            }}
+          />
+        )}
       </div>
 
-      <div
-        className="rounded-lg px-2 py-4 my-4"
-        style={{
-          background: "rgba(255, 255, 255, 0.65)",
-        }}
-      >
-        {ranks.map((_it, index) => (
-          <>
-            <div key={index} className="flex justify-between items-center">
-              <div className="flex gap-4 items-center">
-                {index === 0 ? (
-                  <img src={PngNo1} className="h-[40px] w-[40px]" />
-                ) : (
-                  <div className="rounded-full border-2 w-[40px] h-[40px] flex justify-center items-center text-[#FFE47C] border-[#FFE47C]">
-                    {index + 1}
-                  </div>
-                )}
-                <div>
-                  <p className="font-bold">Anton</p>
-                  <p className="text-white">12345 Frens</p>
-                </div>
-              </div>
-              <div className="text-[#FFE47C]">800000 Points</div>
-            </div>
-            {index !== ranks.length - 1 && (
-              <div className="h-[2px] bg-[#E5E5E5] my-1" />
-            )}
-          </>
-        ))}
+      <div className="flex gap-2 mt-2">
+        <div className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]">
+          Premium Gift
+        </div>
+
+        {taskStatus?.premium ? (
+          <CheckedButton />
+        ) : (
+          <ClaimButton
+            points={2000}
+            onClaim={async () => {
+              await api.checkPremium();
+              await refreshStatus();
+            }}
+          />
+        )}
       </div>
+
+      {(rankInfo?.ranking_info || []).length > 0 && (
+        <div
+          className="rounded-lg px-2 py-4 my-4"
+          style={{
+            background: "rgba(255, 255, 255, 0.65)",
+          }}
+        >
+          {rankInfo?.ranking_info.map((_it, index) => (
+            <>
+              <div key={index} className="flex justify-between items-center">
+                <div className="flex gap-4 items-center">
+                  {index === 0 ? (
+                    <img src={PngNo1} className="h-[40px] w-[40px]" />
+                  ) : (
+                    <div className="rounded-full border-2 w-[40px] h-[40px] flex justify-center items-center text-[#FFE47C] border-[#FFE47C]">
+                      {index + 1}
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-bold">{_it.username}</p>
+                    <p className="text-white">TODO: Frens</p>
+                  </div>
+                </div>
+                <div className="text-[#FFE47C]">{_it.points} Points</div>
+              </div>
+              {index !== rankInfo?.ranking_info.length - 1 && (
+                <div className="h-[2px] bg-[#E5E5E5] my-1" />
+              )}
+            </>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
