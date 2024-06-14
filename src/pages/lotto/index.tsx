@@ -172,7 +172,7 @@ const Lotto = () => {
                   textShadow: "inset 1px 2px 2px  rgba(0, 0, 0, 0.25)",
                 }}
               >
-                $5,000,000
+                $100,000
               </span>
             </div>
             <div

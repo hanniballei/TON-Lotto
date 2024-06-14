@@ -73,7 +73,7 @@ const Ranking = () => {
           color: "rgb(255, 139, 0)",
         }}
       >
-        Chips Challenge
+        Points Challenge
       </h1>
       <p className="text-sm text-center" style={{ color: "rgb(255, 158, 42)" }}>
         Earn points, climb the ranks, and win token airdrops!
@@ -121,6 +121,29 @@ const Ranking = () => {
             {rankInfo?.current_user.invite_number}
           </p>
         </div>
+      </div>
+
+      <div className="flex gap-2 mt-2">
+        <div
+          className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]"
+          style={{
+            textShadow: "0px 1px 1px  #FFFFFF",
+          }}
+        >
+          Premium Gift
+        </div>
+
+        {taskStatus?.premium ? (
+          <CheckedButton />
+        ) : (
+          <ClaimButton
+            points={2000}
+            onClaim={async () => {
+              await api.checkPremium();
+              await refreshStatus();
+            }}
+          />
+        )}
       </div>
 
       <div className="flex gap-2 mt-2">
@@ -197,7 +220,7 @@ const Ranking = () => {
           />
         ) : (
           <ClaimButton
-            points={1000}
+            points={1200}
             onClaim={async () => {
               await api.checkDailyInvite();
               invite();
@@ -221,32 +244,9 @@ const Ranking = () => {
           <CheckedButton />
         ) : (
           <ClaimButton
-            points={800}
+            points={1200}
             onClaim={async () => {
               await api.checkDailyClaim();
-              await refreshStatus();
-            }}
-          />
-        )}
-      </div>
-
-      <div className="flex gap-2 mt-2">
-        <div
-          className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]"
-          style={{
-            textShadow: "0px 1px 1px  #FFFFFF",
-          }}
-        >
-          Premium Gift
-        </div>
-
-        {taskStatus?.premium ? (
-          <CheckedButton />
-        ) : (
-          <ClaimButton
-            points={2000}
-            onClaim={async () => {
-              await api.checkPremium();
               await refreshStatus();
             }}
           />
