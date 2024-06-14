@@ -5,6 +5,8 @@ import { getStartParams } from "@/lib/tma";
 import { useLaunchParams } from "@tma.js/sdk-react";
 import { Suspense, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
+import IconChips from "@/assets/app/icon_chips.png";
+import IconPoints from "@/assets/app/icon_points.png";
 
 interface UserInfo {
   chips: number;
@@ -34,11 +36,13 @@ const Header = () => {
   return (
     <header className="flex justify-between py-4 text-slate-50">
       <div className="flex gap-2">
-        <div className="border rounded-md p-2">
-          💰<span className="ml-2">{data?.chips || 0}</span>
+        <div className="bg-[#212946] rounded-md p-2 px-4 flex gap-1 items-center">
+          <img src={IconChips} className="w-[16px] h-[16px]" />
+          <span className="text-sm">{data?.chips || 0}</span>
         </div>
-        <div className="border rounded-md p-2">
-          💎<span className="ml-2">{data?.points || 0}</span>
+        <div className="bg-[#212946] rounded-md p-2 px-4 flex gap-1 items-center">
+          <img src={IconPoints} className="w-[16px] h-[16px]" />
+          <span className="text-sm">{data?.points || 0}</span>
         </div>
       </div>
 

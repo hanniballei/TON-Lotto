@@ -8,6 +8,7 @@ import BgLuckyPepe from "@/assets/lobby/bg-lucky-pepe.png";
 import BgTL from "@/assets/lobby/bg-tl.png";
 import BgTR from "@/assets/lobby/bg-tr.png";
 
+import PngHome from "@/assets/app/tab_home.png";
 import LuckyPepe from "@/assets/lobby/lucky-pepe.png";
 import LuckyBonk from "@/assets/lobby/lucky-dog.png";
 import LuckyDoge from "@/assets/lobby/lucky-doge.png";
@@ -18,6 +19,7 @@ import { CongratsDialog } from "./components";
 import { Lotto as ILotto, LottoTicket, LottoType } from "./types";
 import { api } from "./api";
 import "./index.css";
+import { Link } from "react-router-dom";
 
 const IconMap: Record<LottoType, string> = {
   doge: LuckyDoge,
@@ -32,7 +34,7 @@ const MainButton = (
   const { children, ...restProps } = props;
   return (
     <button
-      className=" rounded-xl text-slate-50 w-full text-lg"
+      className=" rounded-full text-slate-50 w-full text-lg"
       style={{
         background:
           "linear-gradient(90deg, rgb(84, 7, 5) 0%, rgb(253, 190, 0) 100%)",
@@ -184,7 +186,7 @@ const Lotto = () => {
           <div className="relative p-4">
             {!gaming && (
               <div className=" absolute inset-0 m-4 rounded-md bg-black opacity-50 z-10 text-white flex justify-center items-center">
-                Get a ticket or Continue
+                {"Get a ticket first"}
               </div>
             )}
 
@@ -230,13 +232,30 @@ const Lotto = () => {
           </p>
         </div>
 
-        {hasUnReveal && <MainButton onClick={onContinue}>Continue</MainButton>}
-        {gaming && scratchedPercent >= 0 && scratchedPercent !== 100 && (
-          <MainButton onClick={onReveal}>REVEAL ALL</MainButton>
-        )}
-        {!hasUnReveal && !gaming && (
-          <MainButton onClick={onStart}>Get a Ticket</MainButton>
-        )}
+        <div className="w-full flex gap-2">
+          <Link to="/">
+            <button
+              className="rounded-xl py-1 px-2 flex flex-col justify-center items-center"
+              style={{
+                background: "linear-gradient(90deg, #936FF6 0%, #61E9FC 100%)",
+                boxShadow: "0px 2px 0px  #FFFFFF",
+              }}
+            >
+              <img src={PngHome} className="h-[18px] w-[18px]" />
+              <p className="text-slate-50 text-sm">Lobby</p>
+            </button>
+          </Link>
+
+          {hasUnReveal && (
+            <MainButton onClick={onContinue}>Continue</MainButton>
+          )}
+          {gaming && scratchedPercent >= 0 && scratchedPercent !== 100 && (
+            <MainButton onClick={onReveal}>REVEAL ALL</MainButton>
+          )}
+          {!hasUnReveal && !gaming && (
+            <MainButton onClick={onStart}>Get a Ticket</MainButton>
+          )}
+        </div>
       </div>
 
       <CongratsDialog
