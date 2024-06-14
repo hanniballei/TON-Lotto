@@ -73,7 +73,7 @@ const Ranking = () => {
           color: "rgb(255, 139, 0)",
         }}
       >
-        Pints Challenge
+        Chips Challenge
       </h1>
       <p className="text-sm text-center" style={{ color: "rgb(255, 158, 42)" }}>
         Earn points, climb the ranks, and win token airdrops!

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export const Ranking = () => {
   return (
-    <Link to="/ranking">
+    <Link to="/ranking" className="w-full">
       <div
         className="h-full flex flex-col justify-between gap-1 rounded-xl p-4"
         style={{
@@ -19,7 +19,7 @@ export const Ranking = () => {
             textShadow: "inset 0px 2px 4px  rgb(255, 255, 255)",
           }}
         >
-          Pints Challenge
+          Chips Challenge
         </p>
 
         <img src={PngChampion} className="max-w-[82px] rounded-md mx-auto" />

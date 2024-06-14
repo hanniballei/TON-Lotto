@@ -3,7 +3,7 @@ import PngLuckyPepe from "@/assets/app/lucky-pepe.png";
 
 export const LuckyPepe = () => {
   return (
-    <Link to="/lobby">
+    <Link to="/lobby" className="w-full">
       <div
         className="h-full flex flex-col gap-1 rounded-xl p-4"
         style={{
@@ -35,7 +35,7 @@ export const LuckyPepe = () => {
             textShadow: "2px 2px 2px rgb(3, 41, 107)",
           }}
         >
-          1000 Pints
+          1000 Chips
         </p>
 
         <button
