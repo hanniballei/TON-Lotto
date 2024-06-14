@@ -1,26 +1,9 @@
 import PngTreasure from "@/assets/app/treasure.png";
-import { GameUrl } from "@/const/app";
-import { storageGet } from "@/lib/storage";
-import { getShareUrl } from "@/lib/tma";
-import { useUtils } from "@tma.js/sdk-react";
 
-const ShareText = `
-🥳 Join to play lottery game in TON-LOTTO! Have fun and win airdrop!
-🎁  1000 Chips as a first-time gift
-🎁🎁  2000 Chips if you have Telegram Premium
-`;
+import { useInvite } from "@/lib/hooks/useInvite";
 
 export const ShareBox = () => {
-  const utils = useUtils();
-
-  const onShare = () => {
-    utils.openTelegramLink(
-      getShareUrl(
-        `${GameUrl}?start=referral_${storageGet("invitation_code")}`,
-        ShareText
-      )
-    );
-  };
+  const { invite } = useInvite();
 
   return (
     <div className="grow w-full flex">
@@ -31,7 +14,7 @@ export const ShareBox = () => {
             "linear-gradient(90deg, rgba(56, 56, 56, 0.8) 0%, rgba(8, 53, 135, 1) 99.91%)",
         }}
       >
-        <div className="flex flex-col justify-between" onClick={onShare}>
+        <div className="flex flex-col justify-between" onClick={() => invite()}>
           <p>
             Share with Friends
             <br />
