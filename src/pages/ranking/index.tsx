@@ -124,7 +124,12 @@ const Ranking = () => {
       </div>
 
       <div className="flex gap-2 mt-2">
-        <div className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]">
+        <div
+          className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]"
+          style={{
+            textShadow: "0px 1px 1px  #FFFFFF",
+          }}
+        >
           Join Channel
         </div>
 
@@ -147,7 +152,12 @@ const Ranking = () => {
       </div>
 
       <div className="flex gap-2 mt-2">
-        <div className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]">
+        <div
+          className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]"
+          style={{
+            textShadow: "0px 1px 1px  #FFFFFF",
+          }}
+        >
           Follow X
         </div>
 
@@ -170,7 +180,12 @@ const Ranking = () => {
       </div>
 
       <div className="flex gap-2 mt-2">
-        <div className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]">
+        <div
+          className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]"
+          style={{
+            textShadow: "0px 1px 1px  #FFFFFF",
+          }}
+        >
           Invite Friends
         </div>
 
@@ -193,7 +208,12 @@ const Ranking = () => {
       </div>
 
       <div className="flex gap-2 mt-2">
-        <div className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]">
+        <div
+          className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]"
+          style={{
+            textShadow: "0px 1px 1px  #FFFFFF",
+          }}
+        >
           Daily Check-in
         </div>
 
@@ -211,7 +231,12 @@ const Ranking = () => {
       </div>
 
       <div className="flex gap-2 mt-2">
-        <div className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]">
+        <div
+          className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]"
+          style={{
+            textShadow: "0px 1px 1px  #FFFFFF",
+          }}
+        >
           Premium Gift
         </div>
 
