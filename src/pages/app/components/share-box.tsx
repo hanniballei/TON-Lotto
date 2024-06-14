@@ -7,7 +7,9 @@ export const ShareBox = () => {
 
   const onShare = () => {
     utils.openTelegramLink(
-      `https://t.me/share?url=${encodeURIComponent(GameUrl)}&text=${"Let's Go"}`
+      `https://t.me/share?url=${encodeURI(
+        GameUrl
+      )}&text=${"telegram share test"}`
     );
   };
 
