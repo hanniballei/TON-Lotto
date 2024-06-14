@@ -1,16 +1,14 @@
 import PngTreasure from "@/assets/app/treasure.png";
 import { GameUrl } from "@/const/app";
+import { getShareUrl } from "@/lib/tma";
 import { useUtils } from "@tma.js/sdk-react";
 
 export const ShareBox = () => {
   const utils = useUtils();
 
   const onShare = () => {
-    utils.openTelegramLink(
-      `https://t.me/share/url?url=${encodeURI(
-        GameUrl
-      )}&text=${encodeURIComponent("telegram share test")}`
-    );
+    // TODO: 添加邀请码 & 分享文案
+    utils.openTelegramLink(getShareUrl(GameUrl));
   };
 
   return (
