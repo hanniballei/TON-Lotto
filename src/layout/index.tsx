@@ -3,11 +3,12 @@ import { http } from "@/lib/http";
 import { storageSet } from "@/lib/storage";
 import { getStartParams } from "@/lib/tma";
 import { useLaunchParams } from "@tma.js/sdk-react";
-import { Suspense, useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import Loading from "@/components/Loading";
 import IconChips from "@/assets/app/icon_chips.png";
 import IconPoints from "@/assets/app/icon_points.png";
+import { FreeScratchDialog } from "@/components/FreeScratchDialog";
 
 interface UserInfo {
   chips: number;
@@ -19,7 +20,16 @@ interface UserInfo {
 
 const Header = () => {
   const launchParams = useLaunchParams();
-  const [data, setData] = useState<UserInfo | null>(null);
+
+  const navigate = useNavigate();
+  const freeScratchDialog = useRef<HTMLDialogElement>(null);
+  const [userData, setUserData] = useState<UserInfo | null>(null);
+
+  useEffect(() => {
+    if (userData?.is_new_user) {
+      freeScratchDialog.current?.show();
+    }
+  }, [userData]);
 
   useEffect(() => {
     const init = async () => {
@@ -29,26 +39,34 @@ const Header = () => {
         },
       });
       storageSet("invitation_code", (data as UserInfo).invitation_code);
-      setData(data);
+      setUserData(data);
     };
     init();
   }, [launchParams]);
 
   return (
-    <header className="flex justify-between py-4 text-slate-50">
-      <div className="flex gap-2">
-        <div className="bg-[#212946] rounded-md p-2 px-4 flex gap-1 items-center">
-          <img src={IconChips} className="w-[16px] h-[16px]" />
-          <span className="text-sm">{data?.chips || 0}</span>
+    <>
+      <header className="flex justify-between py-4 text-slate-50">
+        <div className="flex gap-2">
+          <div className="bg-[#212946] rounded-md p-2 px-4 flex gap-1 items-center">
+            <img src={IconChips} className="w-[16px] h-[16px]" />
+            <span className="text-sm">{userData?.chips || 0}</span>
+          </div>
+          <div className="bg-[#212946] rounded-md p-2 px-4 flex gap-1 items-center">
+            <img src={IconPoints} className="w-[16px] h-[16px]" />
+            <span className="text-sm">{userData?.points || 0}</span>
+          </div>
         </div>
-        <div className="bg-[#212946] rounded-md p-2 px-4 flex gap-1 items-center">
-          <img src={IconPoints} className="w-[16px] h-[16px]" />
-          <span className="text-sm">{data?.points || 0}</span>
-        </div>
-      </div>
+      </header>
 
-      {/* <TonConnectButton /> */}
-    </header>
+      <FreeScratchDialog
+        ref={freeScratchDialog}
+        onConfirm={() => {
+          freeScratchDialog.current?.close();
+          navigate({ pathname: "/lobby" });
+        }}
+      />
+    </>
   );
 };
 
