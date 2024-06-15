@@ -9,8 +9,9 @@ import { RankInfo, TaskStatus } from "./types";
 
 import IconChecked from "@/assets/ranking/btn-checked.svg";
 import { useInvite } from "@/lib/hooks/useInvite";
-import { useUtils } from "@tma.js/sdk-react";
+import { useInitData, useUtils } from "@tma.js/sdk-react";
 import { ChannelUrl, TwitterUrl } from "@/const/app";
+import { useToast } from "@/components/ui/use-toast";
 
 const ClaimButton = ({
   points,
@@ -42,9 +43,44 @@ const CheckedButton = ({ onClick }: { onClick?: () => void }) => (
   </button>
 );
 
+const TaskItem = ({
+  text,
+  points,
+  isDone,
+  onClaim,
+  onReClick,
+}: {
+  text: string;
+  points: number;
+  isDone?: boolean;
+  onClaim: () => Promise<void>;
+  onReClick?: () => void;
+}) => {
+  return (
+    <div className="flex gap-2 mt-2">
+      <div
+        className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]"
+        style={{
+          textShadow: "0px 1px 1px  #FFFFFF",
+        }}
+      >
+        {text}
+      </div>
+
+      {isDone ? (
+        <CheckedButton onClick={onReClick} />
+      ) : (
+        <ClaimButton points={points} onClaim={onClaim} />
+      )}
+    </div>
+  );
+};
+
 const Ranking = () => {
+  const { toast } = useToast();
   const tmaUtils = useUtils();
   const { invite } = useInvite();
+  const initData = useInitData();
   const [rankInfo, setRankInfo] = useState<RankInfo>();
   const [taskStatus, setTaskStatus] = useState<TaskStatus>();
 
@@ -123,135 +159,71 @@ const Ranking = () => {
         </div>
       </div>
 
-      <div className="flex gap-2 mt-2">
-        <div
-          className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]"
-          style={{
-            textShadow: "0px 1px 1px  #FFFFFF",
-          }}
-        >
-          Premium Gift
-        </div>
+      <TaskItem
+        isDone={taskStatus?.premium}
+        text="Premium Gift"
+        points={2000}
+        onClaim={async () => {
+          if (!initData?.user?.isPremium) {
+            toast({ variant: "black", description: "You are not premium" });
+            return;
+          }
+          await api.checkPremium();
+          await refreshStatus();
+        }}
+      />
 
-        {taskStatus?.premium ? (
-          <CheckedButton />
-        ) : (
-          <ClaimButton
-            points={2000}
-            onClaim={async () => {
-              await api.checkPremium();
-              await refreshStatus();
-            }}
-          />
-        )}
-      </div>
+      <TaskItem
+        isDone={taskStatus?.join_our_channel}
+        text="Join Channel"
+        points={2000}
+        onClaim={async () => {
+          tmaUtils.openTelegramLink(ChannelUrl);
+          await api.checkJoinChannel();
+          await refreshStatus();
+        }}
+        onReClick={() => {
+          tmaUtils.openTelegramLink(ChannelUrl);
+        }}
+      />
 
-      <div className="flex gap-2 mt-2">
-        <div
-          className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]"
-          style={{
-            textShadow: "0px 1px 1px  #FFFFFF",
-          }}
-        >
-          Join Channel
-        </div>
+      <TaskItem
+        isDone={taskStatus?.follow_our_x}
+        text="Follow X"
+        points={2000}
+        onClaim={async () => {
+          tmaUtils.openLink(TwitterUrl);
+          await api.checkTwitterFollow();
+          await refreshStatus();
+        }}
+        onReClick={() => {
+          tmaUtils.openLink(TwitterUrl);
+        }}
+      />
 
-        {taskStatus?.join_our_channel ? (
-          <CheckedButton
-            onClick={() => {
-              tmaUtils.openTelegramLink(ChannelUrl);
-            }}
-          />
-        ) : (
-          <ClaimButton
-            points={2000}
-            onClaim={async () => {
-              await api.checkJoinChannel();
-              tmaUtils.openTelegramLink(ChannelUrl);
-              await refreshStatus();
-            }}
-          />
-        )}
-      </div>
+      <TaskItem
+        isDone={taskStatus?.daily_invite}
+        text="Invite Friends"
+        points={1200}
+        onClaim={async () => {
+          await api.checkDailyInvite();
+          await invite();
+          await refreshStatus();
+        }}
+        onReClick={() => {
+          invite();
+        }}
+      />
 
-      <div className="flex gap-2 mt-2">
-        <div
-          className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]"
-          style={{
-            textShadow: "0px 1px 1px  #FFFFFF",
-          }}
-        >
-          Follow X
-        </div>
-
-        {taskStatus?.follow_our_x ? (
-          <CheckedButton
-            onClick={() => {
-              tmaUtils.openLink(TwitterUrl);
-            }}
-          />
-        ) : (
-          <ClaimButton
-            points={2000}
-            onClaim={async () => {
-              await api.checkTwitterFollow();
-              tmaUtils.openLink(TwitterUrl);
-              await refreshStatus();
-            }}
-          />
-        )}
-      </div>
-
-      <div className="flex gap-2 mt-2">
-        <div
-          className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]"
-          style={{
-            textShadow: "0px 1px 1px  #FFFFFF",
-          }}
-        >
-          Invite Friends
-        </div>
-
-        {taskStatus?.daily_invite ? (
-          <CheckedButton
-            onClick={() => {
-              invite();
-            }}
-          />
-        ) : (
-          <ClaimButton
-            points={1200}
-            onClaim={async () => {
-              await api.checkDailyInvite();
-              invite();
-              await refreshStatus();
-            }}
-          />
-        )}
-      </div>
-
-      <div className="flex gap-2 mt-2">
-        <div
-          className="w-full text-lg font-bold text-[#FF8B00] border-b-2 border-[#FFC300]"
-          style={{
-            textShadow: "0px 1px 1px  #FFFFFF",
-          }}
-        >
-          Daily Check-in
-        </div>
-
-        {taskStatus?.daily_checkin ? (
-          <CheckedButton />
-        ) : (
-          <ClaimButton
-            points={1200}
-            onClaim={async () => {
-              await api.checkDailyClaim();
-              await refreshStatus();
-            }}
-          />
-        )}
-      </div>
+      <TaskItem
+        isDone={taskStatus?.daily_checkin}
+        text="Daily Check-in"
+        points={1200}
+        onClaim={async () => {
+          await api.checkDailyClaim();
+          await refreshStatus();
+        }}
+      />
 
       {(rankInfo?.ranking_info || []).length > 0 && (
         <div

@@ -2,7 +2,11 @@ import { BackButtonManipulator } from "@/components/BackButtonManipulator";
 import { http } from "@/lib/http";
 import { storageSet } from "@/lib/storage";
 import { getStartParams } from "@/lib/tma";
-import { useLaunchParams } from "@tma.js/sdk-react";
+import {
+  initClosingBehavior,
+  useLaunchParams,
+  useViewport,
+} from "@tma.js/sdk-react";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Loading from "@/components/Loading";
@@ -20,10 +24,17 @@ interface UserInfo {
 
 const Header = () => {
   const launchParams = useLaunchParams();
+  const viewport = useViewport();
+  const [closingBehavior] = initClosingBehavior();
 
   const navigate = useNavigate();
   const freeScratchDialog = useRef<HTMLDialogElement>(null);
   const [userData, setUserData] = useState<UserInfo | null>(null);
+
+  useEffect(() => {
+    viewport?.expand();
+    closingBehavior.enableConfirmation();
+  }, [viewport, closingBehavior]);
 
   useEffect(() => {
     if (userData?.is_new_user) {
@@ -33,6 +44,10 @@ const Header = () => {
 
   useEffect(() => {
     const init = async () => {
+      console.log(
+        "referral =>",
+        getStartParams(launchParams.startParam, "referral")
+      );
       const { data } = await http.get("/user", {
         params: {
           invitation_code: getStartParams(launchParams.startParam, "referral"),

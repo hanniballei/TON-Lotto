@@ -6,7 +6,6 @@ import { Router } from "./router";
 import "./globals.css";
 import {
   SDKProvider,
-  initClosingBehavior,
   mockTelegramEnv,
   parseInitData,
   useLaunchParams,
@@ -35,8 +34,6 @@ const Root: FC = () => {
   const launchParams = useLaunchParams();
   const { initDataRaw } = launchParams || {};
 
-  const [closingBehavior] = initClosingBehavior();
-
   useEffect(() => {
     if (initDataRaw) {
       storageSet("init_data_raw", initDataRaw);
@@ -46,10 +43,6 @@ const Root: FC = () => {
   const manifestUrl = useMemo(() => {
     return new URL("tonconnect-manifest.json", window.location.href).toString();
   }, []);
-
-  useEffect(() => {
-    closingBehavior.enableConfirmation();
-  }, [closingBehavior]);
 
   useEffect(() => {
     (async () => {
