@@ -196,7 +196,9 @@ const Lotto = () => {
           <div className="relative p-4">
             {!gaming && (
               <div className=" absolute inset-0 m-4 rounded-md bg-black opacity-50 z-10 text-white flex justify-center items-center">
-                {"Get a ticket first"}
+                {prizeValue.length > 0 && reward === 0
+                  ? "Sorry, no win this time."
+                  : "Get a ticket first"}
               </div>
             )}
 
@@ -243,7 +245,7 @@ const Lotto = () => {
         </div>
 
         {!gaming && (
-          <div className=" sticky bottom-0 w-full flex gap-2">
+          <div className=" sticky bottom-0 w-full flex gap-2 z-20">
             <Link to="/">
               <button
                 className="rounded-xl py-1 px-2 flex flex-col justify-center items-center"
