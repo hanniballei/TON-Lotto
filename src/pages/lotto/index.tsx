@@ -9,6 +9,7 @@ import BgTL from "@/assets/lobby/bg-tl.png";
 import BgTR from "@/assets/lobby/bg-tr.png";
 
 import PngHome from "@/assets/app/tab_home.png";
+import PngWin from "@/assets/lobby/win.png";
 import LuckyPepe from "@/assets/lobby/lucky-pepe.png";
 import LuckyBonk from "@/assets/lobby/lucky-dog.png";
 import LuckyDoge from "@/assets/lobby/lucky-doge.png";
@@ -196,9 +197,13 @@ const Lotto = () => {
           <div className="relative p-4">
             {!gaming && (
               <div className=" absolute inset-0 m-4 rounded-md bg-black opacity-50 z-10 text-white flex justify-center items-center">
-                {prizeValue.length > 0 && reward === 0
-                  ? "Sorry, no win this time."
-                  : "Get a ticket first"}
+                {prizeValue.length === 0 &&
+                  (hasUnReveal ? "Continue play" : "Get a ticket to play")}
+
+                {prizeValue.length > 0 &&
+                  (reward === 0
+                    ? "Sorry, no win this time"
+                    : `Congrats, You got ${reward} points`)}
               </div>
             )}
 
@@ -217,13 +222,22 @@ const Lotto = () => {
                     key={index}
                     className="relative flex flex-col justify-center items-center text-xs"
                   >
+                    {it.icon === "pepe" && (
+                      <img
+                        src={PngWin}
+                        className="absolute top-0 w-3/5 h-[70%] mx-auto animate-pulse"
+                      />
+                    )}
                     <img
                       src={IconMap[it.icon]}
                       className="h-8 w-8 rounded-full"
                     />
-                    {it.icon === "pepe" && (
-                      <p className="text-center">{`$${it.reward}`}</p>
-                    )}
+
+                    <p
+                      className={cn("text-center text-black", {
+                        "!text-gray-300": it.icon !== "pepe",
+                      })}
+                    >{`$${it.reward}`}</p>
                   </div>
                 ))}
               </div>

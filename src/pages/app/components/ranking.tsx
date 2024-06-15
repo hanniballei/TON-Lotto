@@ -1,8 +1,10 @@
 import PngChampion from "@/assets/app/champion.png";
 import PngCoin from "@/assets/app/coin.png";
+import usePointsStore from "@/store/usePointsStore";
 import { Link } from "react-router-dom";
 
 export const Ranking = () => {
+  const { points } = usePointsStore();
   return (
     <Link to="/ranking" className="w-full">
       <div
@@ -33,7 +35,7 @@ export const Ranking = () => {
             color: "rgb(255, 228, 124)",
           }}
         >
-          1,000,000,000
+          {points}
         </p>
 
         <button
