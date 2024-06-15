@@ -106,13 +106,15 @@ const Lotto = () => {
   }, []);
 
   useEffect(() => {
-    if (scratchedPercent === 100 && reward > 0) {
+    if (scratchedPercent === 100) {
       // 中奖提示
       setTimeout(async () => {
-        await api.submitTicket();
-        congratsDialog.current?.showModal();
         setGaming(false);
-        start();
+        await api.submitTicket();
+        if (reward > 0) {
+          congratsDialog.current?.showModal();
+          start();
+        }
       });
     }
   }, [scratchedPercent, start, reward]);
