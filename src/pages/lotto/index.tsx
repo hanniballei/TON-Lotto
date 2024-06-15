@@ -221,7 +221,9 @@ const Lotto = () => {
                       src={IconMap[it.icon]}
                       className="h-8 w-8 rounded-full"
                     />
-                    {`$${it.reward}`}
+                    {it.icon === "pepe" && (
+                      <p className="text-center">{`$${it.reward}`}</p>
+                    )}
                   </div>
                 ))}
               </div>
