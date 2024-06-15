@@ -5,9 +5,17 @@ import PngBuyPoints from "@/assets/app/tab_points.png";
 // import PngChips from "@/assets/app/tab_chips.png";
 import PngGift from "@/assets/app/tab_gift.png.png";
 import { useInvite } from "@/lib/hooks/useInvite";
+import { useToast } from "@/components/ui/use-toast";
 
 export const Navbar = () => {
   const { invite } = useInvite();
+  const { toast } = useToast();
+  const handleComingSoon = () => {
+    toast({
+      variant: "black",
+      title: "Coming Soon",
+    });
+  };
 
   return (
     <div className="sticky bottom-4 w-full flex justify-between items-end gap-2">
@@ -29,6 +37,7 @@ export const Navbar = () => {
           background: "linear-gradient(90deg, #936FF6 0%, #61E9FC 100%)",
           boxShadow: "0px 2px 0px  #FFFFFF",
         }}
+        onClick={() => handleComingSoon()}
       >
         <img src={PngBuyPoints} className="h-[28px] w-[28px]" />
         <p className="text-slate-50 text-sm">Buy Points</p>
@@ -52,6 +61,7 @@ export const Navbar = () => {
           background: "linear-gradient(90deg, #936FF6 0%, #61E9FC 100%)",
           boxShadow: "0px 2px 0px  #FFFFFF",
         }}
+        onClick={() => handleComingSoon()}
       >
         <img src={PngGift} className="h-[28px] w-[28px]" />
         <p className="text-slate-50 text-sm">Reward</p>
