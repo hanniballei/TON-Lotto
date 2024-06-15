@@ -12,6 +12,7 @@ import { useInvite } from "@/lib/hooks/useInvite";
 import { useInitData, useUtils } from "@tma.js/sdk-react";
 import { ChannelUrl, TwitterUrl } from "@/const/app";
 import { useToast } from "@/components/ui/use-toast";
+import usePointsStore from "@/store/usePointsStore";
 
 const ClaimButton = ({
   points,
@@ -83,6 +84,7 @@ const Ranking = () => {
   const initData = useInitData();
   const [rankInfo, setRankInfo] = useState<RankInfo>();
   const [taskStatus, setTaskStatus] = useState<TaskStatus>();
+  const { addPoints } = usePointsStore();
 
   const refreshStatus = useCallback(async () => {
     const { data } = await api.taskStatus();
@@ -169,6 +171,7 @@ const Ranking = () => {
             return;
           }
           await api.checkPremium();
+          addPoints(2000);
           await refreshStatus();
         }}
       />
@@ -180,6 +183,7 @@ const Ranking = () => {
         onClaim={async () => {
           tmaUtils.openTelegramLink(ChannelUrl);
           await api.checkJoinChannel();
+          addPoints(2000);
           await refreshStatus();
         }}
         onReClick={() => {
@@ -194,6 +198,7 @@ const Ranking = () => {
         onClaim={async () => {
           tmaUtils.openLink(TwitterUrl);
           await api.checkTwitterFollow();
+          addPoints(2000);
           await refreshStatus();
         }}
         onReClick={() => {
@@ -207,6 +212,7 @@ const Ranking = () => {
         points={1200}
         onClaim={async () => {
           await api.checkDailyInvite();
+          addPoints(1200);
           await invite();
           await refreshStatus();
         }}
@@ -221,6 +227,7 @@ const Ranking = () => {
         points={1200}
         onClaim={async () => {
           await api.checkDailyClaim();
+          addPoints(1200);
           await refreshStatus();
         }}
       />

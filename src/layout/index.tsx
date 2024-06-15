@@ -7,12 +7,13 @@ import {
   useLaunchParams,
   useViewport,
 } from "@tma.js/sdk-react";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Loading from "@/components/Loading";
 import IconChips from "@/assets/app/icon_chips.png";
 import IconPoints from "@/assets/app/icon_points.png";
 import { FreeScratchDialog } from "@/components/FreeScratchDialog";
+import usePointsStore from "@/store/usePointsStore";
 
 interface UserInfo {
   chips: number;
@@ -23,24 +24,18 @@ interface UserInfo {
 }
 
 const Header = () => {
+  const { initPoints, points, chips } = usePointsStore();
   const launchParams = useLaunchParams();
   const viewport = useViewport();
   const [closingBehavior] = initClosingBehavior();
 
   const navigate = useNavigate();
   const freeScratchDialog = useRef<HTMLDialogElement>(null);
-  const [userData, setUserData] = useState<UserInfo | null>(null);
 
   useEffect(() => {
     viewport?.expand();
     closingBehavior.enableConfirmation();
   }, [viewport, closingBehavior]);
-
-  useEffect(() => {
-    if (userData?.is_new_user) {
-      freeScratchDialog.current?.show();
-    }
-  }, [userData]);
 
   useEffect(() => {
     const init = async () => {
@@ -53,11 +48,15 @@ const Header = () => {
           invitation_code: getStartParams(launchParams.startParam, "referral"),
         },
       });
-      storageSet("invitation_code", (data as UserInfo).invitation_code);
-      setUserData(data);
+      const userData = data as UserInfo;
+      storageSet("invitation_code", userData.invitation_code);
+      initPoints({ chips: userData.chips, points: userData.points });
+      if (userData?.is_new_user) {
+        freeScratchDialog.current?.show();
+      }
     };
     init();
-  }, [launchParams]);
+  }, [launchParams, initPoints]);
 
   return (
     <>
@@ -65,11 +64,11 @@ const Header = () => {
         <div className="flex gap-2">
           <div className="bg-[#212946] rounded-md p-2 px-4 flex gap-1 items-center">
             <img src={IconChips} className="w-[16px] h-[16px]" />
-            <span className="text-sm">{userData?.chips || 0}</span>
+            <span className="text-sm">{chips || 0}</span>
           </div>
           <div className="bg-[#212946] rounded-md p-2 px-4 flex gap-1 items-center">
             <img src={IconPoints} className="w-[16px] h-[16px]" />
-            <span className="text-sm">{userData?.points || 0}</span>
+            <span className="text-sm">{points || 0}</span>
           </div>
         </div>
       </header>

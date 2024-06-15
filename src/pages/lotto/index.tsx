@@ -20,6 +20,7 @@ import { Lotto as ILotto, LottoTicket, LottoType } from "./types";
 import { api } from "./api";
 import "./index.css";
 import { Link } from "react-router-dom";
+import usePointsStore from "@/store/usePointsStore";
 
 const IconMap: Record<LottoType, string> = {
   doge: LuckyDoge,
@@ -48,6 +49,7 @@ const MainButton = (
 };
 
 const Lotto = () => {
+  const { addPoints, subtractPoints } = usePointsStore();
   const [prizeValue, setPrizeValue] = useState<ILotto[]>([]);
 
   const [hasUnReveal, setHasUnReveal] = useState(false);
@@ -112,17 +114,18 @@ const Lotto = () => {
         setGaming(false);
         await api.submitTicket();
         if (reward > 0) {
+          addPoints(reward);
           congratsDialog.current?.showModal();
           start();
         }
       });
     }
-  }, [scratchedPercent, start, reward]);
+  }, [scratchedPercent, start, reward, addPoints]);
 
   const onStart = async () => {
     const { data } = await api.getTicket();
+    subtractPoints(1000);
     setPrizeValue((data as LottoTicket).lottoInfo.lotto);
-
     initializeCanvas();
     setGaming(true);
   };
