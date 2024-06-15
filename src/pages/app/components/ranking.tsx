@@ -27,7 +27,7 @@ export const Ranking = () => {
         <img src={PngChampion} className="max-w-[82px] rounded-md mx-auto" />
         <p className="text-white text-sm flex justify-center items-center gap-1">
           <img src={PngCoin} className="w-[12px]" />
-          My Token
+          My Points
         </p>
         <p
           className="text-center font-bold"

@@ -119,7 +119,7 @@ const Ranking = () => {
       <img src={PngChampion} className="w-[150px] mx-auto my-6" />
       <div className="w-fit flex mx-auto gap-1">
         <img src={PngLock} className="h-4" />
-        <span className="text-sm text-white font-bold">My Token</span>
+        <span className="text-sm text-white font-bold">My Points</span>
       </div>
       <p
         className="text-4xl font-bold text-center my-6"
