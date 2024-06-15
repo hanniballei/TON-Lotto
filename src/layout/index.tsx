@@ -14,6 +14,7 @@ import IconChips from "@/assets/app/icon_chips.png";
 import IconPoints from "@/assets/app/icon_points.png";
 import { FreeScratchDialog } from "@/components/FreeScratchDialog";
 import usePointsStore from "@/store/usePointsStore";
+import { useCountUp } from "react-countup";
 
 interface UserInfo {
   chips: number;
@@ -28,9 +29,35 @@ const Header = () => {
   const launchParams = useLaunchParams();
   const viewport = useViewport();
   const [closingBehavior] = initClosingBehavior();
+  const chipsCountUpRef = useRef<HTMLSpanElement>(null);
+  const pointsCountUpRef = useRef<HTMLSpanElement>(null);
 
   const navigate = useNavigate();
   const freeScratchDialog = useRef<HTMLDialogElement>(null);
+
+  const { update: chipsCountUpdate } = useCountUp({
+    ref: chipsCountUpRef,
+    start: 0,
+    end: chips,
+    delay: 0,
+    duration: 0.5,
+  });
+
+  const { update: pointsCountUpdate } = useCountUp({
+    ref: pointsCountUpRef,
+    start: 0,
+    end: points,
+    delay: 0,
+    duration: 0.5,
+  });
+
+  useEffect(() => {
+    chipsCountUpdate(chips);
+  }, [chips, chipsCountUpdate]);
+
+  useEffect(() => {
+    pointsCountUpdate(points);
+  }, [points, pointsCountUpdate]);
 
   useEffect(() => {
     viewport?.expand();
@@ -39,10 +66,6 @@ const Header = () => {
 
   useEffect(() => {
     const init = async () => {
-      console.log(
-        "referral =>",
-        getStartParams(launchParams.startParam, "referral")
-      );
       const { data } = await http.get("/user", {
         params: {
           invitation_code: getStartParams(launchParams.startParam, "referral"),
@@ -64,11 +87,15 @@ const Header = () => {
         <div className="flex gap-2">
           <div className="bg-[#212946] rounded-md p-2 px-4 flex gap-1 items-center">
             <img src={IconChips} className="w-[16px] h-[16px]" />
-            <span className="text-sm">{chips || 0}</span>
+            <span className="text-sm" ref={chipsCountUpRef}>
+              {chips || 0}
+            </span>
           </div>
           <div className="bg-[#212946] rounded-md p-2 px-4 flex gap-1 items-center">
             <img src={IconPoints} className="w-[16px] h-[16px]" />
-            <span className="text-sm">{points || 0}</span>
+            <span className="text-sm" ref={pointsCountUpRef}>
+              {points || 0}
+            </span>
           </div>
         </div>
       </header>
