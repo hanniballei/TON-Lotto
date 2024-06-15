@@ -84,7 +84,7 @@ const Ranking = () => {
   const initData = useInitData();
   const [rankInfo, setRankInfo] = useState<RankInfo>();
   const [taskStatus, setTaskStatus] = useState<TaskStatus>();
-  const { addChips } = usePointsStore();
+  const { addChips, points } = usePointsStore();
 
   const refreshStatus = useCallback(async () => {
     const { data } = await api.taskStatus();
@@ -127,7 +127,7 @@ const Ranking = () => {
           color: "rgb(255, 228, 124)",
         }}
       >
-        {rankInfo?.current_user.chips}
+        {points}
       </p>
       <div className="w-full flex justify-center items-center gap-2 mx-auto">
         <div
