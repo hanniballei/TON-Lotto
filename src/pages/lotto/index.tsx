@@ -21,6 +21,7 @@ import { api } from "./api";
 import "./index.css";
 import { Link } from "react-router-dom";
 import usePointsStore from "@/store/usePointsStore";
+import { cn } from "@/lib/utils";
 
 const IconMap: Record<LottoType, string> = {
   doge: LuckyDoge,
@@ -147,7 +148,9 @@ const Lotto = () => {
     <>
       <div className="flex flex-col justify-center items-center gap-4 mb-4">
         <div
-          className="relative w-full rounded-md overflow-hidden"
+          className={cn("relative w-full rounded-md overflow-hidden", {
+            "fixed inset-0": gaming,
+          })}
           style={{
             background:
               "linear-gradient(180deg, rgb(9, 8, 83) 0%, rgb(0, 55, 170) 100%)",
@@ -239,30 +242,33 @@ const Lotto = () => {
           </p>
         </div>
 
-        <div className=" sticky bottom-0 w-full flex gap-2">
-          <Link to="/">
-            <button
-              className="rounded-xl py-1 px-2 flex flex-col justify-center items-center"
-              style={{
-                background: "linear-gradient(90deg, #936FF6 0%, #61E9FC 100%)",
-                boxShadow: "0px 2px 0px  #FFFFFF",
-              }}
-            >
-              <img src={PngHome} className="h-[18px] w-[18px]" />
-              <p className="text-slate-50 text-sm">Lobby</p>
-            </button>
-          </Link>
+        {!gaming && (
+          <div className=" sticky bottom-0 w-full flex gap-2">
+            <Link to="/">
+              <button
+                className="rounded-xl py-1 px-2 flex flex-col justify-center items-center"
+                style={{
+                  background:
+                    "linear-gradient(90deg, #936FF6 0%, #61E9FC 100%)",
+                  boxShadow: "0px 2px 0px  #FFFFFF",
+                }}
+              >
+                <img src={PngHome} className="h-[18px] w-[18px]" />
+                <p className="text-slate-50 text-sm">Lobby</p>
+              </button>
+            </Link>
 
-          {hasUnReveal && (
-            <MainButton onClick={onContinue}>Continue</MainButton>
-          )}
-          {gaming && scratchedPercent >= 0 && scratchedPercent !== 100 && (
-            <MainButton onClick={onReveal}>REVEAL ALL</MainButton>
-          )}
-          {!hasUnReveal && !gaming && (
-            <MainButton onClick={onStart}>Get a Ticket</MainButton>
-          )}
-        </div>
+            {hasUnReveal && (
+              <MainButton onClick={onContinue}>Continue</MainButton>
+            )}
+            {gaming && scratchedPercent >= 0 && scratchedPercent !== 100 && (
+              <MainButton onClick={onReveal}>REVEAL ALL</MainButton>
+            )}
+            {!hasUnReveal && !gaming && (
+              <MainButton onClick={onStart}>Get a Ticket</MainButton>
+            )}
+          </div>
+        )}
       </div>
 
       <CongratsDialog
