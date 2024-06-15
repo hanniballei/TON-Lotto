@@ -49,7 +49,7 @@ const MainButton = (
 };
 
 const Lotto = () => {
-  const { addPoints, subtractPoints } = usePointsStore();
+  const { addPoints, subtractChips } = usePointsStore();
   const [prizeValue, setPrizeValue] = useState<ILotto[]>([]);
 
   const [hasUnReveal, setHasUnReveal] = useState(false);
@@ -124,7 +124,7 @@ const Lotto = () => {
 
   const onStart = async () => {
     const { data } = await api.getTicket();
-    subtractPoints(1000);
+    subtractChips(1000);
     setPrizeValue((data as LottoTicket).lottoInfo.lotto);
     initializeCanvas();
     setGaming(true);
