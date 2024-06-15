@@ -252,7 +252,7 @@ const Ranking = () => {
                   )}
                   <div>
                     <p className="font-bold">{_it.username}</p>
-                    <p className="text-white">TODO: Frens</p>
+                    {/* <p className="text-white">TODO: Frens</p> */}
                   </div>
                 </div>
                 <div className="text-[#FFE47C]">{_it.points} Points</div>
