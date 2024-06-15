@@ -83,13 +83,15 @@ const Lotto = () => {
     autoRevalPercent: 75,
   });
 
+  const reward = prizeValue
+    .filter((it) => it.icon === "pepe")
+    .map((it) => it.reward)
+    .reduce((prev, curr) => prev + curr, 0);
+
   const { start } = useCountUp({
     ref: countUpRef,
     start: 0,
-    end: prizeValue
-      .filter((it) => it.icon === "pepe")
-      .map((it) => it.reward)
-      .reduce((prev, curr) => prev + curr, 0),
+    end: reward,
     delay: 0,
     duration: 1,
   });
@@ -104,7 +106,7 @@ const Lotto = () => {
   }, []);
 
   useEffect(() => {
-    if (scratchedPercent === 100) {
+    if (scratchedPercent === 100 && reward > 0) {
       // 中奖提示
       setTimeout(async () => {
         await api.submitTicket();
@@ -113,7 +115,7 @@ const Lotto = () => {
         start();
       });
     }
-  }, [scratchedPercent, start]);
+  }, [scratchedPercent, start, reward]);
 
   const onStart = async () => {
     const { data } = await api.getTicket();
