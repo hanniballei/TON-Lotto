@@ -15,7 +15,7 @@ export const useInvite = () => {
     const invite = () => {
         utils.openTelegramLink(
             getShareUrl(
-                `${GameUrl}?start=referral_${storageGet("invitation_code")}`,
+                `${GameUrl}?startapp=referral_${storageGet("invitation_code")}`,
                 ShareText
             )
         );
