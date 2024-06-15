@@ -125,7 +125,7 @@ const Lotto = () => {
 
   const onStart = async () => {
     const { data } = await api.getTicket();
-    subtractChips(1000);
+    subtractChips(100);
     setPrizeValue((data as LottoTicket).lottoInfo.lotto);
     initializeCanvas();
     setGaming(true);

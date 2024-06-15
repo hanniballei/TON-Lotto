@@ -35,7 +35,7 @@ export const LuckyPepe = () => {
             textShadow: "2px 2px 2px rgb(3, 41, 107)",
           }}
         >
-          1000 Chips
+          100 Chips
         </p>
 
         <button
