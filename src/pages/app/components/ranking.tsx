@@ -19,7 +19,7 @@ export const Ranking = () => {
             textShadow: "inset 0px 2px 4px  rgb(255, 255, 255)",
           }}
         >
-          Chips Challenge
+          Points Challenge
         </p>
 
         <img src={PngChampion} className="max-w-[82px] rounded-md mx-auto" />
