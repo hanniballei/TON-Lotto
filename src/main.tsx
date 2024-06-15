@@ -15,9 +15,6 @@ import WebApp from "@twa-dev/sdk";
 import { mockInitDataRaw, ThemeParams } from "./const/env";
 import { storageSet } from "./lib/storage";
 import { Toaster } from "./components/ui/toaster";
-import eruda from "eruda";
-
-eruda.init();
 
 const queryClient = new QueryClient();
 
