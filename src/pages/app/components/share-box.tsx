@@ -40,7 +40,7 @@ export const ShareBox = () => {
               textShadow: "2px 2px 2px rgb(22, 83, 181)",
             }}
           >
-            $1000,000
+            $100,000
           </p>
         </div>
       </div>
