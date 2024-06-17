@@ -111,15 +111,15 @@ const Ranking = () => {
           color: "rgb(255, 139, 0)",
         }}
       >
-        Points Challenge
+        Coins Challenge
       </h1>
       <p className="text-sm text-center" style={{ color: "rgb(255, 158, 42)" }}>
-        Earn points, climb the ranks, and win token airdrops!
+        Earn coins, climb the ranks, and win token airdrops!
       </p>
       <img src={PngChampion} className="w-[150px] mx-auto my-6" />
       <div className="w-fit flex mx-auto gap-1">
         <img src={PngLock} className="h-4" />
-        <span className="text-sm text-white font-bold">My Points</span>
+        <span className="text-sm text-white font-bold">My Coins</span>
       </div>
       <p
         className="text-4xl font-bold text-center my-6"
@@ -208,7 +208,7 @@ const Ranking = () => {
 
       <TaskItem
         isDone={taskStatus?.daily_invite}
-        text="Invite Friends"
+        text="Daily Invite Friends"
         points={1200}
         onClaim={async () => {
           await api.checkDailyInvite();

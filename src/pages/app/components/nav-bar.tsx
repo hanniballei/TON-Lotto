@@ -40,7 +40,7 @@ export const Navbar = () => {
         onClick={() => handleComingSoon()}
       >
         <img src={PngBuyPoints} className="h-[28px] w-[28px]" />
-        <p className="text-slate-50 text-sm">Buy Points</p>
+        <p className="text-slate-50 text-sm">Buy Coins</p>
       </button>
 
       <button

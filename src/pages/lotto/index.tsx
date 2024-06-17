@@ -23,6 +23,7 @@ import "./index.css";
 import { Link } from "react-router-dom";
 import usePointsStore from "@/store/usePointsStore";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
 
 const IconMap: Record<LottoType, string> = {
   doge: LuckyDoge,
@@ -34,10 +35,10 @@ const IconMap: Record<LottoType, string> = {
 const MainButton = (
   props: PropsWithChildren<React.ButtonHTMLAttributes<HTMLButtonElement>>
 ) => {
-  const { children, ...restProps } = props;
+  const { children, className, ...restProps } = props;
   return (
     <button
-      className=" rounded-full text-slate-50 w-full text-lg"
+      className={cn("rounded-full text-slate-50 w-full text-lg", className)}
       style={{
         background:
           "linear-gradient(90deg, rgb(84, 7, 5) 0%, rgb(253, 190, 0) 100%)",
@@ -51,7 +52,8 @@ const MainButton = (
 };
 
 const Lotto = () => {
-  const { addPoints, subtractChips } = usePointsStore();
+  const { toast } = useToast();
+  const { addPoints, subtractChips, chips } = usePointsStore();
   const [prizeValue, setPrizeValue] = useState<ILotto[]>([]);
 
   const [hasUnReveal, setHasUnReveal] = useState(false);
@@ -125,6 +127,10 @@ const Lotto = () => {
   }, [scratchedPercent, start, reward, addPoints]);
 
   const onStart = async () => {
+    if (chips < 100) {
+      toast({ variant: "black", description: "Oops, Chips not enough" });
+      return;
+    }
     const { data } = await api.getTicket();
     subtractChips(100);
     setPrizeValue((data as LottoTicket).lottoInfo.lotto);
@@ -203,7 +209,7 @@ const Lotto = () => {
                 {prizeValue.length > 0 &&
                   (reward === 0
                     ? "Sorry, no win this time"
-                    : `Congrats, You got ${reward} points`)}
+                    : `Congrats, You got ${reward} coins`)}
               </div>
             )}
 
@@ -260,6 +266,14 @@ const Lotto = () => {
           </p>
         </div>
 
+        {gaming && (
+          <div className=" absolute bottom-4">
+            <MainButton onClick={onReveal} className="py-1 px-8">
+              REVEAL ALL
+            </MainButton>
+          </div>
+        )}
+
         {!gaming && (
           <div className=" sticky bottom-0 w-full flex gap-2 z-20">
             <Link to="/">
@@ -278,9 +292,6 @@ const Lotto = () => {
 
             {hasUnReveal && (
               <MainButton onClick={onContinue}>Continue</MainButton>
-            )}
-            {gaming && scratchedPercent >= 0 && scratchedPercent !== 100 && (
-              <MainButton onClick={onReveal}>REVEAL ALL</MainButton>
             )}
             {!hasUnReveal && !gaming && (
               <MainButton onClick={onStart}>Get a Ticket</MainButton>
