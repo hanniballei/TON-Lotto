@@ -27,15 +27,7 @@ export const LuckyPepe = () => {
             textShadow: "2px 2px 2px rgb(3, 41, 107)",
           }}
         >
-          Price:
-        </p>
-        <p
-          className="text-center text-xs text-nowrap text-slate-50"
-          style={{
-            textShadow: "2px 2px 2px rgb(3, 41, 107)",
-          }}
-        >
-          100 Chips
+          Go to Scratcher Game!
         </p>
 
         <button

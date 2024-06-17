@@ -18,7 +18,7 @@ export const ShareBox = () => {
           <p>
             Share with Friends
             <br />
-            and Get Bonus!
+            and Get Coins Bonus!
           </p>
 
           <button

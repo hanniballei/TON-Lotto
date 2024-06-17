@@ -175,22 +175,25 @@ const Lotto = () => {
               }}
             />
             <div
-              className="w-full flex justify-center items-center my-[2px] text-center"
+              className="w-full flex flex-col justify-center items-center my-[2px] text-center"
               style={{
                 color: "rgb(248, 231, 159)",
                 background: "rgb(249, 73, 26)",
               }}
             >
-              WIN UP TO{" "}
-              <span
-                style={{
-                  fontSize: "36px",
-                  fontWeight: "bold",
-                  textShadow: "inset 1px 2px 2px  rgba(0, 0, 0, 0.25)",
-                }}
-              >
-                $100,000
-              </span>
+              <p className="text-sm">100 Chips for 1 Lotto</p>
+              <p className="flex items-center text-sm">
+                WIN UP TO
+                <span
+                  className="text-xl font-bold mx-1"
+                  style={{
+                    textShadow: "inset 1px 2px 2px  rgba(0, 0, 0, 0.25)",
+                  }}
+                >
+                  $100,000
+                </span>
+                Coins
+              </p>
             </div>
             <div
               className="w-full h-[2px]"
