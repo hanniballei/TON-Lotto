@@ -25,6 +25,6 @@ http.interceptors.request.use((req) => {
 
 http.interceptors.response.use((res) => {
     return res.data
-}, (err: AxiosError) => {
-    toast({ variant: 'destructive', description: err.message })
+}, (err: AxiosError<{ code: number, msg: string }>) => {
+    toast({ variant: 'destructive', description: err?.response?.data?.msg || err.message })
 })
