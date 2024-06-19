@@ -153,8 +153,12 @@ const Lotto = () => {
 
   return (
     <>
-      <div className="relative h-full overflow-y-auto overflow-x-hidden flex flex-col justify-center items-center gap-4 mb-4">
+      <div className="relative flex flex-col justify-center items-center gap-4 mb-4">
         <div
+          onTouchStart={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
           className={cn("relative w-full rounded-md overflow-hidden", {
             "fixed inset-0 h-full overflow-y-auto overflow-x-hidden": gaming,
           })}
