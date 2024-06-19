@@ -116,7 +116,7 @@ const Layout = () => {
     <>
       <BackButtonManipulator />
       <div className="bg-gradient-to-r from-[#0a39b0] to-blue-950">
-        <div className={"container min-h-screen max-w-lg flex flex-col px-4"}>
+        <div className={"container min-h-lvh max-w-lg flex flex-col px-4"}>
           <Header />
           <main className="relative grow">
             <Suspense
