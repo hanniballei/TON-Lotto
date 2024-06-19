@@ -156,7 +156,7 @@ const Lotto = () => {
       <div className="relative h-full flex flex-col justify-center items-center gap-4 mb-4">
         <div
           className={cn("relative w-full rounded-md overflow-hidden", {
-            "fixed inset-0": gaming,
+            "fixed inset-0 h-screen overflow-y-auto overflow-x-hidden": gaming,
           })}
           style={{
             background:
@@ -270,7 +270,7 @@ const Lotto = () => {
         </div>
 
         {gaming && (
-          <div className=" absolute bottom-4">
+          <div className="fixed bottom-4">
             <MainButton onClick={onReveal} className="py-1 px-8">
               REVEAL ALL
             </MainButton>
