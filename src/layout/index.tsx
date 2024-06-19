@@ -115,7 +115,13 @@ const Layout = () => {
   return (
     <>
       <BackButtonManipulator />
-      <div className="bg-gradient-to-r h-full fixed inset-0 overflow-y-auto overflow-x-hidden from-[#0a39b0] to-blue-950">
+      <div
+        onTouchStart={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+        className="bg-gradient-to-r h-full fixed inset-0 overflow-y-auto overflow-x-hidden from-[#0a39b0] to-blue-950"
+      >
         <div className={"container max-w-lg flex flex-col px-4"}>
           <Header />
           <main className="relative grow">
