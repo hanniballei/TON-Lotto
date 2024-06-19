@@ -156,7 +156,7 @@ const Lotto = () => {
       <div className="relative h-full flex flex-col justify-center items-center gap-4 mb-4">
         <div
           className={cn("relative w-full rounded-md overflow-hidden", {
-            "fixed inset-0 h-screen overflow-y-auto overflow-x-hidden": gaming,
+            "fixed inset-0 h-full overflow-y-auto overflow-x-hidden": gaming,
           })}
           style={{
             background:
