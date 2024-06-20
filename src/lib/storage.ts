@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import store from 'store2'
 
-export type CacheKey = 'init_data_raw' | 'invitation_code'
+export type CacheKey = 'init_data_raw' | 'invitation_code' | 'first_load'
 
 const prefixKey = (key: CacheKey) => `Lotto-${key}`
 

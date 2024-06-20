@@ -9,9 +9,11 @@ export const FreeScratchDialog = forwardRef(
     {
       confirmText,
       onConfirm,
+      onMaskClick,
     }: {
       confirmText?: string;
       onConfirm: () => void;
+      onMaskClick?: () => void;
     },
     ref: ForwardedRef<HTMLDialogElement>
   ) => {
@@ -21,7 +23,10 @@ export const FreeScratchDialog = forwardRef(
         className="fixed inset-0 bg-transparent overflow-hidden z-[999]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="fixed inset-0 bg-black bg-opacity-30" />
+        <div
+          className="fixed inset-0 bg-black bg-opacity-30"
+          onClick={onMaskClick}
+        />
 
         <div
           className="relative z-[999] w-[80vw] max-w-[600px] rounded-xl overflow-hidden"
@@ -32,7 +37,8 @@ export const FreeScratchDialog = forwardRef(
         >
           <div className="flex flex-col gap-4 justify-center items-center p-6 py-4 rounded-md ">
             <p className="text-white text-xl font-bold text-center">
-              Free scratch card for you!
+              {/* Free scratch card for you! */}
+              Scratch by fingers to play
             </p>
             <div className="relative w-full">
               <img

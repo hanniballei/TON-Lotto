@@ -1,6 +1,6 @@
 import { BackButtonManipulator } from "@/components/BackButtonManipulator";
 import { http } from "@/lib/http";
-import { storageSet } from "@/lib/storage";
+import { storageGet, storageSet } from "@/lib/storage";
 import { getStartParams } from "@/lib/tma";
 import {
   initClosingBehavior,
@@ -74,12 +74,15 @@ const Header = () => {
       const userData = data as UserInfo;
       storageSet("invitation_code", userData.invitation_code);
       initPoints({ chips: userData.chips, points: userData.points });
-      if (userData?.is_new_user) {
-        freeScratchDialog.current?.show();
-      }
     };
     init();
   }, [launchParams, initPoints]);
+
+  useEffect(() => {
+    if (storageGet("first_load", true)) {
+      freeScratchDialog.current?.show();
+    }
+  }, []);
 
   return (
     <>
@@ -102,7 +105,12 @@ const Header = () => {
 
       <FreeScratchDialog
         ref={freeScratchDialog}
+        onMaskClick={() => {
+          storageSet("first_load", false);
+          freeScratchDialog.current?.close();
+        }}
         onConfirm={() => {
+          storageSet("first_load", false);
           freeScratchDialog.current?.close();
           navigate({ pathname: "/lobby" });
         }}
