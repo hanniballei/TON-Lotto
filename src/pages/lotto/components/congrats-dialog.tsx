@@ -41,7 +41,7 @@ export const CongratsDialog = forwardRef(
           </p>
           <button
             onClick={() => onCollect()}
-            className="text-slate-50 text-sm p-6"
+            className="text-slate-50 text-sm p-6 m-0 outline-none"
             style={{
               background: `url(${PngCollectBtn}) no-repeat center`,
               backgroundSize: "contain",

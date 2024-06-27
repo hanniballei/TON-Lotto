@@ -61,7 +61,7 @@ export const FreeScratchDialog = forwardRef(
 
             <button
               onClick={() => onConfirm()}
-              className="text-slate-50 text-sm font-bold p-6 py-2 rounded-full"
+              className="text-slate-50 text-sm font-bold p-6 py-2 rounded-full outline-none"
               style={{
                 background: `url(${PngLuckyButton}) no-repeat center`,
                 backgroundSize: "contain",
